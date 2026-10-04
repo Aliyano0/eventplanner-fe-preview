@@ -46,12 +46,12 @@ to upstream so they can be re-synced:
 
 | Component | Purpose |
 | --- | --- |
-| `layout/SiteHeader` | sticky header: phone = drawer button + page title; md+ = brand, nav links, Sign In / Sign Up (mock), "List your venue" from lg |
-| `layout/AuthButtons` | mock Sign In / Sign Up buttons (header + drawer) |
+| `layout/SiteHeader` | sticky header: phone = drawer button + page title; tablet = drawer button + logo + Sign In / Sign Up (mock); lg+ = logo, nav links, "List your venue", Sign In / Sign Up |
+| `layout/AuthButtons` | mock Sign In / Sign Up buttons (header from tablet width; phone drawer) |
 | `layout/SiteFooter` | brand, link columns (plan an event, explore, venue owners, company/legal), copyright |
 | `legal/LegalDocumentView` | shared layout for policy pages (title, table of contents, numbered sections) — [[Legal-Pages]] |
-| `layout/PlannerNav` | planner tab bar (md and up) |
-| `layout/BottomNav` | fixed 6-tab nav on phones: Home(Dashboard), Moodboard, Budget, Guests, Tasks, Book for Me |
+| `layout/PlannerNav` | planner tab bar (lg and up) |
+| `layout/BottomNav` | sticky app-style tab bar below lg (phones and tablets): the six planner tabs on planner screens (Home(Dashboard), Moodboard, Budget, Guests, Tasks, Book for Me), site-wide tabs (Home, Venues, Vendors, My Planner, List Venue) elsewhere, none in the setup wizard / venue form |
 | `layout/Container` | centered column with the app's gutters; sizes `narrow` / `form` / `medium` / `default` / `wide` |
 | `layout/BackLink` | "← Back to …" link used on inner pages |
 

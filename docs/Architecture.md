@@ -27,17 +27,17 @@ Part of [[00-Home]]. Next: [[Routing-Map]], [[Server-vs-Client-Components]].
 Frontend/
 ├─ AGENTS.md, CLAUDE.md        agent rules (Next 16 ships its docs in node_modules/next/dist/docs)
 ├─ docs/                       this vault
-├─ public/                     static files (robots.txt, placeholder.svg)
+├─ public/                     static files (robots.txt)
 ├─ next.config.ts, postcss.config.mjs, eslint.config.mjs, tsconfig.json, vitest.config.mts
 └─ src/
    ├─ app/                     routing layer ONLY: layouts, metadata, thin page.tsx files
-   │  ├─ layout.tsx            root layout (server): html/body, providers, SiteHeader, metadata template
+   │  ├─ layout.tsx            root layout (server): html/body, providers, SiteHeader, BottomNav, metadata template
    │  ├─ providers.tsx         client providers: Tooltip, Toaster, Sonner
    │  ├─ globals.css           Tailwind v4 entry, design tokens, v3-compat layer
    │  ├─ not-found.tsx         404 (header from root layout + footer)
-   │  ├─ favicon.ico
+   │  ├─ icon.svg              site icon (favicon), see [[Design-System]]
    │  ├─ (site)/               public pages group: layout = <main> + SiteFooter
-   │  └─ (planner)/            "My Planner" group: layout = PlannerNav + <main> + SiteFooter + BottomNav
+   │  └─ (planner)/            "My Planner" group: layout = PlannerNav (lg+) + <main> + SiteFooter
    │     └─ <route>/page.tsx   one per URL, see [[Routing-Map]]
    ├─ views/                   the screens (formerly src/pages in the original project)
    ├─ components/
@@ -67,11 +67,11 @@ each page. Details, breakpoints and per-page layouts: [[Layout-and-Responsive-De
 ```
 RootLayout            <body class="flex min-h-screen flex-col">
  ├─ SiteHeader         sticky, all pages
- └─ (site) layout   or   (planner) layout
-      ├─ [PlannerNav]    md+ only, planner pages
-      ├─ <main flex-1>   the page (a view inside Container)
-      ├─ SiteFooter
-      └─ [BottomNav]     phones only, planner pages
+ ├─ (site) layout   or   (planner) layout
+ │    ├─ [PlannerNav]    lg+ only, planner pages
+ │    ├─ <main flex-1>   the page (a view inside Container)
+ │    └─ SiteFooter
+ └─ BottomNav          below lg only; sticky, last element; tabs chosen per route (bottomNavFor)
 ```
 
 ## Request lifecycle

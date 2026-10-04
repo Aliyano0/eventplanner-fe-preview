@@ -29,7 +29,7 @@ The backend has not been started, so only the frontend stack is considered here.
 
 | Phase | Scope | Where this codebase stands |
 | --- | --- | --- |
-| F1 Application shell & design system | layouts, tokens, form components, dialogs, tabs, nav | **Shell done**: App Router layout, providers, token system, shadcn kit, TopBar/BottomNav. Figma-driven implementation and loading/empty/error states not started |
+| F1 Application shell & design system | layouts, tokens, form components, dialogs, tabs, nav | **Shell done**: App Router layout, providers, token system, shadcn kit, responsive header / footer / bottom nav. Figma-driven implementation and loading/empty/error states not started |
 | F2 Public marketplace discovery | catalogues, search, filters, profiles | Prototype screens exist (Venues, Vendors) with sample data; no real data, search or profiles |
 | F3 Customer event creation & auth conversion | draft → auth prompt → resume | Prototype planner setup + a local-only welcome/sign-up dialog |
 | F4 My Planner | budget, guests, tasks, calendar, shortlist | Prototype Budget / Guests / Tasks / Moodboard / Dashboard screens, in-memory only |

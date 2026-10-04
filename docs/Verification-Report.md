@@ -136,7 +136,7 @@ pages), run on a clean production build.
 - Guests filter chips overflowed ≤ 380px (also in the original) → `flex-wrap`.
 - Budget edit-mode input overflowed 375px (also in the original) → `min-w-0`.
 - Dashboard countdown badge rendered `25DAYS` on one line (also in the original) → stacked.
-- Planner footer is padded on phones so the fixed bottom nav never covers it.
+- Planner footer was padded on phones so the fixed bottom nav never covered it (superseded: the bottom nav is now sticky in the page flow and needs no padding — see the last section).
 - Stale route-type files left in `.next/dev` by an earlier dev run broke `tsc` after the routes moved into route groups
   (build artefact, not code; delete `.next` after moving routes).
 
@@ -168,3 +168,27 @@ links, Sign In and Sign Up).
 Not covered: the PDF check proves the *text* matches, not that the text is legally sufficient (see [[Legal-Pages]]);
 hover/focus states; browsers other than Chromium; real devices. The earlier original-vs-migrated comparison was not
 re-run (the layouts have intentionally changed since).
+
+---
+
+## App-style bottom nav on phones and tablets
+
+Checks for the shell change described in [[Layout-and-Responsive-Design]]: the sticky bottom nav now appears on every page
+below `lg` (1024px), tablets get a top bar with the logo, and the desktop header / planner tab row start at 1024px.
+This **supersedes the breakpoint assumptions of the two earlier responsive sections** (they expected the desktop header
+from 768px and a bottom nav on planner pages only). Run on a clean production build.
+
+| Check | Result |
+| --- | --- |
+| **Responsive QA**: 18 routes × 7 widths (320, 375, 768, **1023**, 1024, 1280, 1536) = 126 combinations. Each: no horizontal overflow, header + footer, one `<h1>`, footer below content, correct chrome for the width (below 1024: menu button, bottom nav except on the setup wizard / venue form, logo + Sign In in the bar from 768; from 1024: header links, planner tab row, no bottom nav), the bottom nav **docked below the footer** at the end of the page, no console errors | ✅ **126/126** |
+| **Behaviour flows**: the earlier flows (bottom-nav selectors and the tablet checks updated) + 5 new — site-wide bottom nav on a public page (tabs navigate, active tab follows, *My Planner* switches to the planner tabs); no bottom nav on the setup wizard and venue registration, site tabs on the 404; the nav stays pinned while scrolling and docks below the footer; tablet 768 top bar (logo → Home, Sign In, drawer without a duplicate auth block); the 1023 ↔ 1024 breakpoint | ✅ **36/36** |
+| Unit tests for `bottomNavFor` (planner vs site vs hidden routes, active tab per route, `/budgeting` is not a planner route) | ✅ 21 new; Vitest **39/39** |
+| `next dev` console on 18 routes × 2 storage states (locale/timezone different from the server's) | ✅ 0 warnings, 0 hydration errors |
+| `tsc --noEmit` · ESLint · `next build` | ✅ clean · clean · 25 static pages |
+
+Viewed by eye: Home, Dashboard (top and end of page), Venues and the setup wizard at 375px; Dashboard and Venues at 768px;
+Dashboard at 1023px and 1024px; the 404 page at 375px.
+
+Not covered: real touch devices and phone browser toolbars (the sticky bar was checked in desktop Chromium at phone
+sizes), landscape phones (≥ 768px wide, so they get the tablet bar — about 106px of chrome on a 390px-tall screen), and
+browsers other than Chromium.

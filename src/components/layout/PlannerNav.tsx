@@ -7,14 +7,14 @@ import { Container } from "./Container";
 import { plannerTabs } from "./nav-config";
 
 /**
- * Tab bar for the planner screens on md and up. On phones the same destinations live in the fixed
- * `BottomNav`, so this bar is hidden below `md`.
+ * Tab bar for the planner screens on lg and up. On phones and tablets the same destinations live in the sticky
+ * `BottomNav`, so this bar is hidden below `lg`.
  */
 export function PlannerNav() {
   const pathname = usePathname();
 
   return (
-    <div className="sticky top-16 z-30 hidden border-b border-border bg-background/90 backdrop-blur-xs md:block">
+    <div className="sticky top-16 z-30 hidden border-b border-border bg-background/90 backdrop-blur-xs lg:block">
       <Container>
         <nav className="-mb-px flex gap-1 overflow-x-auto" aria-label="My Planner">
           {plannerTabs.map((tab) => {

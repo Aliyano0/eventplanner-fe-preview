@@ -2,32 +2,40 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { plannerTabs } from "./nav-config";
+import { bottomNavFor } from "./nav-config";
 
-/** Fixed bottom tab bar for the planner screens on phones. From `md` up the `PlannerNav` tab bar replaces it. */
+/**
+ * App-style tab bar for phones and tablets (below `lg`; the desktop header and planner tab bar replace it above).
+ *
+ * It is the last element of the page and `sticky bottom-0`: it stays at the bottom of the screen while scrolling and,
+ * at the end of a page, sits below the footer — so it never covers content and no spacer is needed.
+ * Planner screens show the original six planner tabs; other pages show the site-wide tabs; the setup wizard and
+ * venue registration form show none (see `bottomNavFor`).
+ */
 const BottomNav = () => {
   const pathname = usePathname();
+  const config = bottomNavFor(pathname);
+
+  if (!config) return null;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border z-50 md:hidden" aria-label="My Planner">
-      <div className="flex justify-around items-center py-2 max-w-lg mx-auto">
-        {plannerTabs.map((item) => {
-          const isActive = pathname === item.href;
-          const Icon = item.icon;
+    <nav className="sticky bottom-0 z-50 border-t border-border bg-card lg:hidden" aria-label={config.label}>
+      <div className="flex justify-around items-center py-2 max-w-lg md:max-w-2xl mx-auto">
+        {config.tabs.map((tab) => {
+          const Icon = tab.icon;
           return (
             <Link
-              key={item.href}
-              href={item.href}
+              key={tab.href}
+              href={tab.href}
+              aria-current={tab.active ? "page" : undefined}
               className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-center transition-colors ${
-                isActive
-                  ? "text-primary"
-                  : "text-muted-foreground hover:text-foreground"
+                tab.active ? "text-primary" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <div className={`p-1.5 rounded-full ${isActive ? "bg-primary text-primary-foreground" : ""}`}>
-                <Icon className="w-4 h-4" />
+              <div className={`p-1.5 rounded-full ${tab.active ? "bg-primary text-primary-foreground" : ""}`}>
+                <Icon className="w-4 h-4 md:w-5 md:h-5" />
               </div>
-              <span className="text-[10px] font-medium">{item.shortLabel}</span>
+              <span className="text-[10px] md:text-xs font-medium">{tab.label}</span>
             </Link>
           );
         })}

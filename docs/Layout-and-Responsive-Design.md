@@ -7,51 +7,71 @@ tags: [layout, responsive, header, footer, ux]
 
 Part of [[00-Home]]. Related: [[Architecture]], [[Routing-Map]], [[Design-System]], [[Verification-Report]].
 
-The original app was designed as a phone app: single narrow columns, a per-page top bar and a fixed bottom nav, no
-site-wide header or footer. It now behaves like a responsive web app. **The phone layout keeps the client's design
-language and structure**; tablets and desktops get a real header, wider containers, multi-column grids and a footer.
+The original app was designed as a phone app: single narrow columns, a sticky top bar and a bottom nav on the planner
+screens, no site-wide header or footer. It now behaves like a responsive web app. **Phones and tablets keep that
+app-style shell** (sticky top bar + sticky bottom nav); laptops and desktops get a real header with navigation links, wider
+containers, multi-column grids and a footer.
 
 ## Breakpoints
 
-Tailwind defaults. The shell switches between "phone" and "web" at **`md` (768px)**.
+Tailwind defaults. The shell switches between the **app shell** (phones and tablets) and the **desktop shell** at
+**`lg` (1024px)**. Page content has its own, earlier breakpoints (`sm`, `md`) for grids.
 
-| Name | Min width | Typical device | What changes |
-| --- | --- | --- | --- |
-| (base) | 0 | phones (320–639) | drawer header, bottom nav (planner), single column |
-| `sm` | 640px | large phones / small tablets | wider gutters (24px), 2-column grids start (venues, vendors) |
-| `md` | 768px | tablets | **web header + planner tab bar replace drawer + bottom nav**, 2-column pages |
-| `lg` | 1024px | laptops | 3–4 column grids, side-by-side summaries, gutters 32px |
-| `xl` / `2xl` | 1280 / 1536px | desktops | content stays centered at its max width |
+| Name | Min width | Typical device | Shell | What changes |
+| --- | --- | --- | --- | --- |
+| (base) | 0 | phones (320–639) | app | top bar = ☰ + page title + search; bottom nav; single column |
+| `sm` | 640px | large phones | app | wider gutters (24px), 2-column grids start (venues, vendors) |
+| `md` | 768px | tablets | app | top bar = ☰ + **logo** + Sign In / Sign Up; bottom nav is larger; 2-column pages |
+| `lg` | 1024px | laptops, tablets in landscape | **desktop** | **header with nav links + planner tab bar replace the bottom nav**; 3–4 column grids, gutters 32px |
+| `xl` / `2xl` | 1280 / 1536px | desktops | desktop | content stays centered at its max width |
+
+Why `lg` and not `md`: at 768px the desktop header (logo, four links, Sign In, Sign Up) plus the planner tab row left
+almost no room ("Book for Me" ended 24px from the edge), and tablets are touch devices where a bottom nav is easier to
+reach. The switch is the `lg:` / `md:` classes in `SiteHeader`, `PlannerNav` and `BottomNav` (and the planner layout).
 
 ## The app shell
 
 ```
-┌ SiteHeader (sticky) ─────────────────────────────────────────────┐
-│ phone:  ☰  Page title                              🔍            │
-│ md+  :  ✦ EventPlan   Home  Venues  Vendors  My Planner   [Sign In] [Sign Up]  (lg+: [List your venue]) │
-├ PlannerNav (md+, planner pages only, sticky) ───────────────────┤
-│ Dashboard  Moodboard  Budget  Guests  Tasks  Book for Me         │
-├ <main> ──────────────────────────────────────────────────────────┤
-│ page content, inside a Container                                  │
-├ SiteFooter ──────────────────────────────────────────────────────┤
-│ brand · Plan an event · Explore · For venue owners · Company · © year │
-└ BottomNav (phones, planner pages only, fixed) ───────────────────┘
+phones / tablets (< lg)                          laptops / desktops (≥ lg)
+┌ SiteHeader (sticky) ───────────────────────┐   ┌ SiteHeader (sticky) ─────────────────────────────────┐
+│ <md : ☰  Page title                  🔍    │   │ ✦ EventPlan  Home Venues Vendors My Planner          │
+│ md  : ☰ ✦ EventPlan     [Sign In][Sign Up] │   │                [List your venue][Sign In][Sign Up]   │
+├ <main> ────────────────────────────────────┤   ├ PlannerNav (planner pages only, sticky) ─────────────┤
+│ page content, inside a Container           │   │ Dashboard Moodboard Budget Guests Tasks Book for Me  │
+├ SiteFooter ────────────────────────────────┤   ├ <main> ──────────────────────────────────────────────┤
+│ brand · links · © year                     │   │ page content, inside a Container                     │
+└ BottomNav (sticky, last element) ──────────┘   ├ SiteFooter ──────────────────────────────────────────┘
 ```
 
 | Component | File | Notes |
 | --- | --- | --- |
-| `SiteHeader` | `components/layout/SiteHeader.tsx` | client; phone = the original top-bar look (drawer + page title); md+ = brand, links with `aria-current`, Sign In / Sign Up (mock), "List your venue" from `lg` |
-| Drawer | inside `SiteHeader` | Home, Venues, Vendors, Dashboard, New Event, List Your Venue, Profile\*, Settings\* (\* placeholders, as before), then Sign In / Sign Up buttons |
-| `AuthButtons` | `components/layout/AuthButtons.tsx` | **mock** Sign In / Sign Up (inline in the header from `md`, stacked in the drawer); a click shows a "coming soon" message |
-| `PlannerNav` | `components/layout/PlannerNav.tsx` | md+ tab bar for the six planner screens, sticky below the header |
-| `BottomNav` | `components/layout/BottomNav.tsx` | phones only (`md:hidden`), unchanged markup |
-| `SiteFooter` | `components/layout/SiteFooter.tsx` | server component; the planner layout adds bottom padding on phones so the fixed bottom nav never covers it |
+| `SiteHeader` | `components/layout/SiteHeader.tsx` | client; phones = the original top-bar look (drawer + page title); tablets = drawer + logo + Sign In / Sign Up (mock); `lg+` = logo, links with `aria-current`, "List your venue", Sign In / Sign Up |
+| Drawer | inside `SiteHeader` | Home, Venues, Vendors, Dashboard, New Event, List Your Venue, Profile\*, Settings\* (\* placeholders, as before); on phones also Sign In / Sign Up buttons (tablets have them in the bar) |
+| `AuthButtons` | `components/layout/AuthButtons.tsx` | **mock** Sign In / Sign Up (inline in the header from `md`, stacked in the phone drawer); a click shows a "coming soon" message |
+| `PlannerNav` | `components/layout/PlannerNav.tsx` | `lg+` tab bar for the six planner screens, sticky below the header |
+| `BottomNav` | `components/layout/BottomNav.tsx` | `< lg`, rendered once from the root layout; content decided by `bottomNavFor(pathname)` (below) |
+| `SiteFooter` | `components/layout/SiteFooter.tsx` | server component |
 | `Container` | `components/layout/Container.tsx` | the only place page width and gutters are defined |
 | `BackLink` | `components/layout/BackLink.tsx` | "← Back to …" |
-| `nav-config.ts` | `components/layout/nav-config.ts` | one list drives header, drawer, tabs, bottom nav and footer; also the phone page-title map |
+| `nav-config.ts` | `components/layout/nav-config.ts` | one list drives header, drawer, tabs, bottom nav and footer; also the phone page-title map and `bottomNavFor` |
 
 Layouts decide the chrome (`app/layout.tsx`, `app/(site)/layout.tsx`, `app/(planner)/layout.tsx`); **pages never
 render a header, footer or bottom nav themselves.**
+
+### The bottom nav
+
+`BottomNav` is the last element of the page and `position: sticky; bottom: 0`: it stays at the bottom of the screen
+while the page scrolls and, at the end of a page, sits *below* the footer — it never covers content, so no spacer or
+`pb-*` is needed. `bottomNavFor(pathname)` in `nav-config.ts` decides what it shows (unit-tested in
+`nav-config.test.ts`):
+
+| Where | Tabs | Notes |
+| --- | --- | --- |
+| Planner screens (`/dashboard`, `/moodboard`, `/budget`, `/guests`, `/tasks`, `/book`) | Home (Dashboard) · Moodboard · Budget · Guests · Tasks · Book for Me | the original app's bottom nav, unchanged |
+| Every other page (Home, Services, Venues, Vendors, Manage Venue, legal pages, 404) | Home · Venues · Vendors · My Planner · List Venue | new: the same look, site-wide destinations; "My Planner" opens the dashboard and the nav switches to the planner tabs |
+| `/planner-setup/*`, `/venue-registration` | none | step-by-step flows with their own bottom actions (as in the original app) |
+
+To leave the planner on a phone, use the drawer (as in the original) or the footer's links.
 
 ### Container sizes
 
@@ -96,16 +116,18 @@ breakpoints where the layout changes.
 3. Mobile first: write the phone layout, then add `sm:` / `md:` / `lg:` utilities. Use `grid` + `gap-*`.
 4. Planner screens go in `app/(planner)/`; everything else in `app/(site)/`.
 5. Never hard-code a link list in a component — add it to `nav-config.ts`.
-6. Don't add `pb-24` to clear the bottom nav; the planner layout handles it.
-7. Verify at 320, 375, 768, 1024, 1280 (and 1536) — see the check below.
+6. Don't add `pb-24` to clear the bottom nav; it is in the page flow (sticky) and never overlaps content. A new route
+   that should have no bottom nav (a focused flow) is added to `BOTTOM_NAV_HIDDEN_PATHS` in `nav-config.ts`.
+7. Verify at 320, 375, 768, 1023, 1024, 1280 (and 1536) — see the check below.
 
 ## What was verified
 
 See [[Verification-Report]] for the original-vs-migrated comparison. For this layout work a separate responsive
-check opens every route at 320 / 375 / 768 / 1024 / 1280 / 1536px and asserts: no horizontal overflow, header and
-footer present, exactly one `<h1>`, the footer below the content, the right chrome for the width (drawer + bottom nav on
-phones; header links + planner tabs from `md`), and no console errors. Results are recorded in
-[[Verification-Report]].
+check opens every route at 320 / 375 / 768 / 1023 / 1024 / 1280 / 1536px and asserts: no horizontal overflow, header and
+footer present, exactly one `<h1>`, the footer below the content, the right chrome for the width (app shell below
+1024px: menu button, bottom nav — except the setup wizard and venue form — and on tablets the logo and Sign In in the
+bar; desktop shell from 1024px: header links, planner tab row, no bottom nav), the bottom nav docking below the footer
+at the end of the page, and no console errors. Results are recorded in [[Verification-Report]].
 
 ## Decisions and notes
 
@@ -113,10 +135,14 @@ phones; header links + planner tabs from `md`), and no console errors. Results a
   social), so none are shown. The **COMPANY** column links the About, Terms & Conditions and Cookie Policy pages built from
   the client PDF — see [[Legal-Pages]].
 - **Header actions.** *Sign In* and *Sign Up* are **UI mocks** (`AuthButtons`): authentication isn't built, so a click
-  shows a "coming soon" message. They appear from `md`; the phone header stays compact and has them in the drawer.
-  *List your venue* (→ `/manage-venue`) is shown from `lg`, so the header fits at 768px. The welcome dialog on Home is
-  still a separate local prototype.
+  shows a "coming soon" message. They appear in the header from `md` (tablets and desktop); the phone header stays
+  compact and has them in the drawer. *List your venue* (→ `/manage-venue`) is a desktop-header button (`lg+`); on
+  phones and tablets it is the **List Venue** tab of the bottom nav and an entry in the drawer. The welcome dialog on Home
+  is still a separate local prototype.
 - **Search icon.** The phone header keeps the original inert search icon; it is hidden from `md` because it does nothing.
+- **Tablet shell (decision).** Tablets (768–1023px) use the app shell, not the desktop header — see *Why `lg` and not
+  `md`* above. If the client prefers the desktop header on tablets, change the `lg:` classes in `SiteHeader`,
+  `PlannerNav` and `BottomNav` back to `md:`.
 - **Fixes made while making pages responsive** (all pre-existing in the original app):
   - Budget "edit total" input overflowed a 375px screen → `min-w-0`.
   - Guests filter chips overflowed ≤ 380px → `flex-wrap`.

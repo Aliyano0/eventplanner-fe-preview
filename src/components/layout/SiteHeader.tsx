@@ -15,10 +15,11 @@ const drawerItemClassName =
   "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-center text-sm font-medium text-foreground hover:bg-accent transition-colors";
 
 /**
- * Site-wide sticky header.
+ * Site-wide sticky header. Navigation below `lg` is the sticky `BottomNav`, so the bar stays light there.
  *
- * - Phones (< md): compact bar — drawer button + current page title (the app's original top bar).
- * - md and up: brand, primary navigation with active state, and a "List your venue" action.
+ * - Phones (< md): compact bar — drawer button, current page title, search (the app's original top bar).
+ * - Tablets (md–lg): drawer button, logo, Sign In / Sign Up.
+ * - lg and up: logo, primary navigation with active state, "List your venue", Sign In / Sign Up.
  */
 export function SiteHeader() {
   const pathname = usePathname();
@@ -30,7 +31,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-3">
           <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
             <SheetTrigger asChild>
-              <button className="-ml-1 rounded-md p-1 transition-colors hover:bg-muted md:hidden" aria-label="Open menu">
+              <button className="-ml-1 rounded-md p-1 transition-colors hover:bg-muted lg:hidden" aria-label="Open menu">
                 <Menu className="h-5 w-5 text-foreground" />
               </button>
             </SheetTrigger>
@@ -60,7 +61,8 @@ export function SiteHeader() {
                   ),
                 )}
               </nav>
-              <div className="border-t border-border p-3">
+              {/* Tablets already show Sign In / Sign Up in the header bar */}
+              <div className="border-t border-border p-3 md:hidden">
                 <AuthButtons layout="stacked" onAction={() => setDrawerOpen(false)} />
               </div>
             </SheetContent>
@@ -69,7 +71,7 @@ export function SiteHeader() {
           {/* Phones: page title */}
           <span className="font-semibold text-foreground md:hidden">{titleFor(pathname)}</span>
 
-          {/* md and up: brand */}
+          {/* Tablets and desktop: logo */}
           <Link href="/" className="hidden items-center gap-2 md:flex">
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10">
               <Sparkles className="h-5 w-5 text-primary" />
@@ -78,7 +80,7 @@ export function SiteHeader() {
           </Link>
         </div>
 
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
           {mainNav.map((item) => {
             const active = item.isActive(pathname);
             return (

@@ -55,8 +55,10 @@ The file paths in the table above are relative to a route group folder (it does 
 | Group | Routes | Chrome it adds |
 | --- | --- | --- |
 | `(site)` | `/`, `/services/[eventType]`, `/venues`, `/vendors`, `/planner-setup/[eventType]`, `/manage-venue`, `/venue-registration`, `/about`, `/terms`, `/cookie-policy` | footer |
-| `(planner)` | `/dashboard`, `/moodboard`, `/budget`, `/guests`, `/tasks`, `/book` | planner tab bar (md+), footer, bottom nav (phones) |
-| — (root) | `not-found` | header (root layout) + footer |
+| `(planner)` | `/dashboard`, `/moodboard`, `/budget`, `/guests`, `/tasks`, `/book` | planner tab bar (lg+), footer |
+| — (root) | `not-found` | header + bottom nav (root layout) + footer |
+
+The bottom nav (phones and tablets, below `lg`) lives in the root layout and is shown on every route except the planner setup wizard and venue registration; planner routes get the six planner tabs, all others the site-wide tabs — see [[Layout-and-Responsive-Design]].
 
 All navigation (header, drawer, planner tabs, bottom nav, footer) reads from one config,
 `components/layout/nav-config.ts`, so adding a route is a single edit there plus the route file.
