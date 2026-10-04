@@ -70,12 +70,12 @@ Zustand (My Planner draft state), NextAuth/Auth.js (F3), Motion (animated flows)
 ## Housekeeping
 
 - **Nothing is committed yet.** The repository contains only the initial `LICENSE` commit (and `LICENSE` is
-  deleted in the working tree); the whole Lovable project was untracked. Suggest committing the migrated project as
+  deleted in the working tree); the whole original project was untracked. Suggest committing the migrated project as
   one baseline commit.
 - **The original Vite source** was copied before any change to
   `C:\Users\H.H\AppData\Local\Temp\claude\C--eventplanner-marketplace-Frontend\fd493b1d-170c-41d3-8807-9cdb834a4d77\scratchpad\vite-original`
   (without `node_modules`). That is a temporary Claude session folder and may be cleaned up, so copy it somewhere
-  permanent — or commit it to a `lovable-original` branch — if you want to keep the client's original handy.
+  permanent — or commit it to an `original-vite` branch — if you want to keep the client's original handy.
 - The parity/behaviour test harness used for [[Verification-Report]] currently lives outside the repo. It can be
   added as an `e2e/` suite (Playwright) if you want it as a regression gate for future UI work.
 - Keep this vault and `PROGRESS.md` (repo root) up to date with each feature, per the repo `CLAUDE.md`.

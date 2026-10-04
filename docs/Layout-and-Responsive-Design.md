@@ -7,7 +7,7 @@ tags: [layout, responsive, header, footer, ux]
 
 Part of [[00-Home]]. Related: [[Architecture]], [[Routing-Map]], [[Design-System]], [[Verification-Report]].
 
-The Lovable app was designed as a phone app: single narrow columns, a per-page top bar and a fixed bottom nav, no
+The original app was designed as a phone app: single narrow columns, a per-page top bar and a fixed bottom nav, no
 site-wide header or footer. It now behaves like a responsive web app. **The phone layout keeps the client's design
 language and structure**; tablets and desktops get a real header, wider containers, multi-column grids and a footer.
 

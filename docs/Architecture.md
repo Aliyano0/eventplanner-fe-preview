@@ -13,7 +13,7 @@ Part of [[00-Home]]. Next: [[Routing-Map]], [[Server-vs-Client-Components]].
 | --- | --- | --- |
 | Framework | **Next.js 16.3.8**, App Router, Turbopack | PRD baseline is 16.3 — see [[PRD-Alignment]] |
 | UI runtime | React 19.2 | required by Next 16 |
-| Language | TypeScript 5, `strict: true` | the Lovable project had `strict: false` |
+| Language | TypeScript 5, `strict: true` | the original project had `strict: false` |
 | Styling | **Tailwind CSS v4** + `tailwindcss-animate` | v3-parity layer: [[Tailwind-v4-Compatibility]] |
 | Components | shadcn/ui (Radix primitives) | [[Design-System]] |
 | Icons | `lucide-react` (pinned `0.462.0`) | pinned for pixel parity, see [[Follow-ups]] |
@@ -39,7 +39,7 @@ Frontend/
    │  ├─ (site)/               public pages group: layout = <main> + SiteFooter
    │  └─ (planner)/            "My Planner" group: layout = PlannerNav + <main> + SiteFooter + BottomNav
    │     └─ <route>/page.tsx   one per URL, see [[Routing-Map]]
-   ├─ views/                   the screens (formerly src/pages in the Lovable project)
+   ├─ views/                   the screens (formerly src/pages in the original project)
    ├─ components/
    │  ├─ layout/               app shell: SiteHeader, SiteFooter, PlannerNav, BottomNav, AuthButtons, Container, BackLink, nav-config
    │  ├─ legal/                LegalDocumentView (shared policy-page layout), RichText
@@ -54,7 +54,7 @@ Frontend/
 ### Why `src/views` and not `src/pages`
 
 In a Next.js project that has a `src/` folder, `src/pages` is treated as the **legacy Pages Router**.
-The Lovable project kept its screens in `src/pages`, so leaving them there would have created
+The original project kept its screens in `src/pages`, so leaving them there would have created
 accidental routes like `/BudgetPage`. They live in `src/views` instead; `src/app/**/page.tsx` files
 import them. This also keeps `app/` free of UI code, so route files stay small and can export
 `metadata`.
@@ -85,4 +85,4 @@ RootLayout            <body class="flex min-h-screen flex-col">
 
 ## Import alias
 
-`@/*` → `src/*` (same alias the Lovable project used, so no import paths changed).
+`@/*` → `src/*` (same alias the original project used, so no import paths changed).

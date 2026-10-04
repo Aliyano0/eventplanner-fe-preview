@@ -38,7 +38,7 @@ The backend has not been started, so only the frontend stack is considered here.
 
 ## Constraints from the PRD that shaped this migration
 
-- *Client Figma is the visual source of truth* → no redesign; the migration preserves the Lovable UI exactly.
+- *Client Figma is the visual source of truth* → no redesign; the migration preserves the original UI exactly.
 - *Minimal unnecessary client JavaScript* (§16.2) → Server Components where possible; unused React Query removed.
 - *Browsers never call Express directly* (§14.2) → no client-side API plumbing was added.
 - *Semantic/crawlable public pages* (§21) → navigation uses real `<a href>` links.

@@ -8,7 +8,7 @@ tags: [routing, nextjs]
 Part of [[00-Home]]. See [[Architecture]] for the folder layout and [[Server-vs-Client-Components]] for the
 rendering column.
 
-All 13 URLs from the Lovable `react-router` setup are preserved exactly; three company/legal pages were added afterwards ([[Legal-Pages]]).
+All 13 URLs from the original `react-router` setup are preserved exactly; three company/legal pages were added afterwards ([[Legal-Pages]]).
 
 | URL | Route file (`src/app/…`) | View (`src/views/…`) | View type | Rendering |
 | --- | --- | --- | --- | --- |
@@ -32,7 +32,7 @@ All 13 URLs from the Lovable `react-router` setup are preserved exactly; three c
 
 ## Behaviour that moved from react-router to Next
 
-| react-router (Lovable) | Next.js 16 |
+| react-router (original) | Next.js 16 |
 | --- | --- |
 | `<BrowserRouter><Routes>…` in `App.tsx` | file-system routing under `src/app` |
 | `useNavigate()` + `navigate("/x")` on a `<button>` | `<Link href="/x">` for plain navigation (crawlable, prefetched); `useRouter().push` where navigation follows logic (planner wizard, form submit) |
@@ -43,7 +43,7 @@ All 13 URLs from the Lovable `react-router` setup are preserved exactly; three c
 
 ## Page titles
 
-The old `index.html` had one title ("Lovable App") for every URL. The root layout now sets
+The old `index.html` had one title (a generic placeholder) for every URL. The root layout now sets
 `title.template = "%s | EventPlan"` and each route adds its own name (`Budget | EventPlan`, …); the home
 page uses `EventPlan`. Descriptions and Open Graph basics live in `src/app/layout.tsx`. Canonical URLs, sitemap
 and OG images are PRD phase F7 — see [[PRD-Alignment]].

@@ -18,7 +18,7 @@ Part of [[00-Home]]. Related: [[Vite-to-Next-Migration]], [[Tailwind-v4-Compatib
 | `tailwindcss-animate` | ^1.0.7 | Radix open/close animations (`animate-in`, `fade-in-0`, …) |
 | `tailwind-merge` | ^3.7 | needs v3 for Tailwind v4 class names |
 
-## Kept as-is from the Lovable project
+## Kept as-is from the original project
 
 Radix UI primitives (`@radix-ui/react-*`), `class-variance-authority`, `clsx`, `cmdk`, `date-fns@3`,
 `embla-carousel-react`, `input-otp`, `react-hook-form`, `@hookform/resolvers`, `react-resizable-panels@2`,
@@ -40,11 +40,11 @@ pixel parity was a requirement).
 
 | Package | Reason |
 | --- | --- |
-| `vite`, `@vitejs/plugin-react-swc`, `lovable-tagger` | replaced by Next.js / Turbopack; the tagger was a Lovable-editor dev plugin |
+| `vite`, `@vitejs/plugin-react-swc`, the editor tagger plugin | replaced by Next.js / Turbopack; the tagger was a dev-only editor plugin |
 | `react-router-dom` | replaced by the App Router (`NavLink.tsx` was an unused wrapper and was deleted) |
 | `@tanstack/react-query` | was mounted in `App.tsx` but never used; PRD routes reads through Server Components and a generated API client |
 | `autoprefixer` | built into the v4 PostCSS plugin |
-| `@playwright/test`, `playwright*.ts` | the config imported a package that was never installed (`lovable-agent-playwright-config`), so e2e could not run; PRD §20.3 e2e is a later task |
+| `@playwright/test`, `playwright*.ts` | the config imported a package that was never installed, so e2e could not run; PRD §20.3 e2e is a later task |
 | `@eslint/js`, `globals`, `typescript-eslint`, `eslint-plugin-react-hooks`, `eslint-plugin-react-refresh` | `eslint-config-next` bundles the equivalents |
 | `@tailwindcss/typography` | installed but never enabled |
 

@@ -4,7 +4,7 @@ Event-planning marketplace web app for the Pakistani market (customers plan even
 
 **Stack:** Next.js 16 (App Router, Turbopack) · React 19 · TypeScript (strict) · Tailwind CSS v4 · shadcn/ui (Radix) · Vitest
 
-This project was migrated from a Lovable-generated React + Vite app to Next.js with every screen unchanged —
+This project was migrated from an earlier React + Vite prototype to Next.js with every screen unchanged —
 see [`docs/Vite-to-Next-Migration.md`](docs/Vite-to-Next-Migration.md).
 
 ## Quick start
@@ -29,7 +29,7 @@ npm run dev        # http://localhost:3000
 ```
 src/app/        routes (thin page.tsx files), layout, providers, globals.css
 src/views/      the screens
-src/components/ TopBar, BottomNav, ui/ (shadcn kit)
+src/components/ layout/ (header, footer, nav), legal/, ui/ (shadcn kit)
 src/hooks/      use-local-storage, use-mobile, use-toast
 src/lib/        sample data, formatting, utils
 docs/           documentation vault (start at docs/00-Home.md)

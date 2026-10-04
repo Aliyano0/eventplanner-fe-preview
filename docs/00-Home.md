@@ -23,7 +23,7 @@ Map of content for the EventPlan web frontend (Next.js 16 App Router). Open this
 - [[State-and-Storage]] — `localStorage` keys and the SSR-safe `useStoredValue` hook
 - [[Design-System]] — tokens, shadcn/ui kit, shared components
 - [[Tailwind-v4-Compatibility]] — the v3-parity layer in `globals.css` and why each rule exists
-- [[Dependencies]] — what changed from the Lovable/Vite project and what each package is for
+- [[Dependencies]] — what changed from the original Vite project and what each package is for
 
 ## The Vite → Next.js migration
 

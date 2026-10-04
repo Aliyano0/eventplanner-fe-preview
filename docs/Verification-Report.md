@@ -14,7 +14,7 @@ Part of [[00-Home]]. Context: [[Vite-to-Next-Migration]], [[Tailwind-v4-Compatib
 > end of this note.
 
 **Requirement:** every page stays exactly as it was; no UI/UX breakage.
-**Method:** run the *original* Lovable app and the *migrated* app side by side in the same headless Chromium and
+**Method:** run the *original* app and the *migrated* app side by side in the same headless Chromium and
 compare them mechanically, rather than by eye.
 
 ## Result
@@ -33,7 +33,7 @@ describe what is on disk. Only `README.md` was edited afterwards.
 
 ## What was compared
 
-- **Original:** the untouched Lovable project, `vite build` + `vite preview`.
+- **Original:** the untouched original project, `vite build` + `vite preview`.
 - **Migrated:** this project, `next build` + `next start`.
 - **Viewports:** 375×812 (phone) and 1280×812 (desktop). Browser: headless Chromium (Playwright), `en-US`,
   timezone `Asia/Karachi`; remote Unsplash images are stubbed with a fixed PNG so layout can't vary with the network.

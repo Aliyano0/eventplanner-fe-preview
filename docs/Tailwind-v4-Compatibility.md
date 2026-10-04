@@ -8,7 +8,7 @@ tags: [tailwind, styling, migration]
 Part of [[00-Home]]. Lives in `src/app/globals.css`. Related: [[Design-System]], [[Verification-Report]],
 [[Vite-to-Next-Migration]].
 
-The PRD baseline is **Tailwind CSS v4** ([[PRD-Alignment]]); the Lovable UI was built on **v3.4**. The official
+The PRD baseline is **Tailwind CSS v4** ([[PRD-Alignment]]); the original UI was built on **v3.4**. The official
 upgrade tool (`@tailwindcss/upgrade`) converted the config and renamed utilities, but a v4 build with only
 those changes did **not** render the same: the first full comparison against the original showed
 ~16,600 style/geometry differences (different default font, line-height inheritance, spacing, colours).
