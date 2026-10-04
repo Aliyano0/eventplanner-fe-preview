@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { ArrowLeft, Sparkles, Building2, Users, ClipboardList, ChevronRight } from "lucide-react";
+import { Sparkles, Building2, Users, ClipboardList, ChevronRight } from "lucide-react";
+import { BackLink } from "@/components/layout/BackLink";
+import { Container } from "@/components/layout/Container";
 
 const serviceItems = [
   { id: "venues", name: "Venues", description: "Discover the perfect location for your event", icon: Building2 },
@@ -22,27 +24,23 @@ const ServicesPage = ({ eventType }: ServicesPageProps) => {
   const label = eventLabels[eventType] || "Event";
 
   return (
-    <div className="min-h-screen bg-background">
-      <Link
-        href="/"
-        className="flex w-fit items-center gap-1 px-4 pt-4 text-center text-sm text-primary hover:underline"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Change Event Type
-      </Link>
+    <div className="bg-background">
+      <Container className="pt-4">
+        <BackLink href="/">Change Event Type</BackLink>
+      </Container>
 
-      <div className="flex flex-col items-center pt-10 pb-6 px-4">
+      <div className="flex flex-col items-center pt-10 pb-6 px-4 md:pt-14 md:pb-10">
         <div className="w-14 h-14 rounded-full bg-accent flex items-center justify-center mb-3">
           <Sparkles className="w-7 h-7 text-accent-foreground" />
         </div>
         <p className="text-xs font-semibold tracking-widest text-muted-foreground mb-1">
           PLANNING YOUR
         </p>
-        <h1 className="text-2xl font-bold text-foreground mb-1">{label}</h1>
-        <p className="text-sm text-muted-foreground">What would you like to explore first?</p>
+        <h1 className="text-2xl font-bold text-foreground mb-1 md:text-4xl">{label}</h1>
+        <p className="text-sm text-muted-foreground md:text-base">What would you like to explore first?</p>
       </div>
 
-      <div className="px-4 max-w-lg mx-auto space-y-4 pb-10">
+      <Container size="narrow" className="space-y-4 pb-10 md:grid md:max-w-5xl md:grid-cols-3 md:gap-4 md:space-y-0">
         {serviceItems.map((item) => {
           const Icon = item.icon;
           const href = item.id === "planner" ? `/planner-setup/${eventType}` : `/${item.id}`;
@@ -50,7 +48,7 @@ const ServicesPage = ({ eventType }: ServicesPageProps) => {
             <Link
               key={item.id}
               href={href}
-              className="w-full flex items-center gap-4 p-5 bg-card rounded-xl border border-border text-center hover:shadow-md transition-shadow"
+              className="w-full flex items-center gap-4 p-5 bg-card rounded-xl border border-border text-center hover:shadow-md transition-shadow md:flex-col md:items-start md:gap-3 md:p-6"
             >
               <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center">
                 <Icon className="w-5 h-5 text-accent-foreground" />
@@ -59,11 +57,11 @@ const ServicesPage = ({ eventType }: ServicesPageProps) => {
                 <h3 className="font-semibold text-foreground">{item.name}</h3>
                 <p className="text-sm text-muted-foreground">{item.description}</p>
               </div>
-              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+              <ChevronRight className="w-5 h-5 text-muted-foreground md:hidden" />
             </Link>
           );
         })}
-      </div>
+      </Container>
 
       <p className="text-center text-xs text-muted-foreground pb-6">
         You can always switch between these sections

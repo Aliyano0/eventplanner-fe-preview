@@ -21,6 +21,9 @@ event handlers that aren't plain navigation, or browser APIs.**
 | `views/VendorsPage` | static list (the search box and buttons are inert UI, as in the original) |
 | `views/BookForMePage` | static markup |
 | `views/ManageVenuePage` | static markup + a `Button asChild` wrapping a `<Link>` |
+| `app/(site)/layout.tsx`, `app/(planner)/layout.tsx` | compose `<main>`, footer and the client nav components |
+| `components/layout/SiteFooter`, `Container`, `BackLink`, `nav-config` | static markup and links |
+| `components/legal/*`, `views/AboutPage`, `TermsPage`, `CookiePolicyPage` | static text rendered from `src/content` (the table of contents uses native `<details>` and anchors, no JS) |
 
 ## What is a Client Component (`"use client"`)
 
@@ -28,8 +31,9 @@ event handlers that aren't plain navigation, or browser APIs.**
 | --- | --- |
 | `app/providers.tsx` | Radix `TooltipProvider`, toast/Sonner state |
 | `app/not-found.tsx` | `usePathname()` to log the missing path |
-| `components/TopBar.tsx` | drawer open/close state |
-| `components/BottomNav.tsx` | `usePathname()` for the active tab |
+| `components/layout/SiteHeader.tsx` | drawer open/close state, `usePathname()` for the title and active link |
+| `components/layout/AuthButtons.tsx` | click handlers (mock Sign In / Sign Up show a toast) |
+| `components/layout/PlannerNav.tsx`, `components/layout/BottomNav.tsx` | `usePathname()` for the active tab |
 | `views/HomePage`, `DashboardPage`, `BudgetPage`, `GuestsPage`, `TasksPage`, `MoodboardPage`, `VenuesPage`, `PlannerSetupPage`, `VenueRegistrationPage` | `useState`, dialogs, forms, `localStorage` |
 | shadcn files using hooks/context (`form`, `sidebar`, `carousel`, `chart`, `toaster`, `sonner`, `input-otp`, `toggle-group`, `calendar`, `use-toast`) | marked `"use client"` at the top |
 

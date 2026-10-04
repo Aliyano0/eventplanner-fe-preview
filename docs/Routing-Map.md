@@ -8,7 +8,7 @@ tags: [routing, nextjs]
 Part of [[00-Home]]. See [[Architecture]] for the folder layout and [[Server-vs-Client-Components]] for the
 rendering column.
 
-All 13 URLs from the Lovable `react-router` setup are preserved exactly.
+All 13 URLs from the Lovable `react-router` setup are preserved exactly; three company/legal pages were added afterwards ([[Legal-Pages]]).
 
 | URL | Route file (`src/app/…`) | View (`src/views/…`) | View type | Rendering |
 | --- | --- | --- | --- | --- |
@@ -25,6 +25,9 @@ All 13 URLs from the Lovable `react-router` setup are preserved exactly.
 | `/book` | `book/page.tsx` | `BookForMePage` | **server** | static |
 | `/manage-venue` | `manage-venue/page.tsx` | `ManageVenuePage` | **server** | static |
 | `/venue-registration` | `venue-registration/page.tsx` | `VenueRegistrationPage` | client | static |
+| `/about` | `about/page.tsx` | `AboutPage` | **server** | static |
+| `/terms` | `terms/page.tsx` | `TermsPage` | **server** | static |
+| `/cookie-policy` | `cookie-policy/page.tsx` | `CookiePolicyPage` | **server** | static |
 | `*` (anything else) | `not-found.tsx` | — | client | returns HTTP **404** |
 
 ## Behaviour that moved from react-router to Next
@@ -45,9 +48,18 @@ The old `index.html` had one title ("Lovable App") for every URL. The root layou
 page uses `EventPlan`. Descriptions and Open Graph basics live in `src/app/layout.tsx`. Canonical URLs, sitemap
 and OG images are PRD phase F7 — see [[PRD-Alignment]].
 
-## Shared navigation
+## Route groups and navigation
 
-- `BottomNav` (`components/BottomNav.tsx`) — six tabs, active state from `usePathname()`.
-- `TopBar` (`components/TopBar.tsx`) — drawer menu + optional back link (`backTo` / `backLabel`).
+The file paths in the table above are relative to a route group folder (it does not appear in the URL):
 
-Related: [[Design-System]], [[Vite-to-Next-Migration]].
+| Group | Routes | Chrome it adds |
+| --- | --- | --- |
+| `(site)` | `/`, `/services/[eventType]`, `/venues`, `/vendors`, `/planner-setup/[eventType]`, `/manage-venue`, `/venue-registration`, `/about`, `/terms`, `/cookie-policy` | footer |
+| `(planner)` | `/dashboard`, `/moodboard`, `/budget`, `/guests`, `/tasks`, `/book` | planner tab bar (md+), footer, bottom nav (phones) |
+| — (root) | `not-found` | header (root layout) + footer |
+
+All navigation (header, drawer, planner tabs, bottom nav, footer) reads from one config,
+`components/layout/nav-config.ts`, so adding a route is a single edit there plus the route file.
+Active states: the header's *My Planner* item is active on every planner route and on the setup wizard.
+
+Related: [[Layout-and-Responsive-Design]], [[Design-System]], [[Vite-to-Next-Migration]].

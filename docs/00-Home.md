@@ -17,6 +17,8 @@ Map of content for the EventPlan web frontend (Next.js 16 App Router). Open this
 
 ## How it is built
 
+- [[Layout-and-Responsive-Design]] — header, footer, breakpoints, containers and every page's layout
+- [[Legal-Pages]] — About, Terms & Conditions and Cookie Policy built from the client PDF (and how fidelity is checked)
 - [[Server-vs-Client-Components]] — what runs where and why
 - [[State-and-Storage]] — `localStorage` keys and the SSR-safe `useStoredValue` hook
 - [[Design-System]] — tokens, shadcn/ui kit, shared components

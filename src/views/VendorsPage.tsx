@@ -1,5 +1,6 @@
 import { Search, MapPin, Camera, Sparkles, Scissors, Mail, Gift, FileText, Music, Cake, Plus } from "lucide-react";
-import TopBar from "@/components/TopBar";
+import { BackLink } from "@/components/layout/BackLink";
+import { Container } from "@/components/layout/Container";
 
 const categories = [
   { name: "Photographers & Videographers", icon: Camera },
@@ -15,13 +16,12 @@ const categories = [
 
 const VendorsPage = () => {
   return (
-    <div className="min-h-screen bg-background pb-20">
-      <TopBar title="Vendors" backTo="/services/wedding" backLabel="Back to Services" />
-
-      <div className="px-4 pt-4 max-w-4xl mx-auto">
+    <div className="bg-background">
+      <Container className="pt-4 pb-10">
+        <BackLink href="/services/wedding" className="mb-4">Back to Services</BackLink>
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-foreground">Find Vendors</h2>
+            <h1 className="text-2xl font-bold text-foreground md:text-3xl">Find Vendors</h1>
             <p className="text-sm text-muted-foreground mb-4">Connect with trusted professionals</p>
           </div>
           <button className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
@@ -29,7 +29,7 @@ const VendorsPage = () => {
           </button>
         </div>
 
-        <div className="flex gap-2 mb-4">
+        <div className="mb-4 flex gap-2 md:max-w-xl">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
@@ -47,7 +47,7 @@ const VendorsPage = () => {
           BROWSE BY CATEGORY
         </p>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
           {categories.map((cat) => {
             const Icon = cat.icon;
             return (
@@ -63,7 +63,7 @@ const VendorsPage = () => {
             );
           })}
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

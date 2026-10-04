@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, DollarSign, Calendar, Users, CheckSquare, ChevronRight } from "lucide-react";
+import { Container } from "@/components/layout/Container";
 
 const currencies = [
   { code: "PKR", symbol: "Rs", label: "PKR" },
@@ -49,16 +50,16 @@ const PlannerSetupPage = ({ eventType }: PlannerSetupPageProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <button
-        onClick={() => (step > 0 ? setStep(step - 1) : router.push(`/services/${eventType}`))}
-        className="flex items-center gap-1 px-4 pt-4 text-sm text-primary hover:underline"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        Back to Services
-      </button>
+    <div className="bg-background flex flex-col">
+      <Container size="narrow" className="flex-1 pt-4 pb-10 md:pb-14">
+        <button
+          onClick={() => (step > 0 ? setStep(step - 1) : router.push(`/services/${eventType}`))}
+          className="mb-4 flex items-center gap-1 text-sm text-primary hover:underline md:mb-8"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Services
+        </button>
 
-      <div className="px-4 pt-4 max-w-lg mx-auto w-full flex-1">
         <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
           <span>STEP {step + 1} OF {steps.length}</span>
           <span>{Math.round(progress)}%</span>
@@ -76,7 +77,7 @@ const PlannerSetupPage = ({ eventType }: PlannerSetupPageProps) => {
               <Icon className="w-6 h-6 text-accent-foreground" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-foreground">{current.title}</h2>
+              <h1 className="text-xl font-bold text-foreground">{current.title}</h1>
               <p className="text-sm text-muted-foreground">{current.description}</p>
             </div>
           </div>
@@ -183,7 +184,7 @@ const PlannerSetupPage = ({ eventType }: PlannerSetupPageProps) => {
             {step === 3 ? "Start Planning" : "Continue"} <ChevronRight className="w-4 h-4" />
           </button>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

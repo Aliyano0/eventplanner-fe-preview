@@ -46,11 +46,20 @@ to upstream so they can be re-synced:
 
 | Component | Purpose |
 | --- | --- |
-| `components/TopBar` | sticky header with a slide-in drawer (Home, Dashboard, New Event, Profile\*, Settings\*), optional back link (\* placeholders) |
-| `components/BottomNav` | fixed 6-tab nav: Home(Dashboard), Moodboard, Budget, Guests, Tasks, Book for Me |
+| `layout/SiteHeader` | sticky header: phone = drawer button + page title; md+ = brand, nav links, Sign In / Sign Up (mock), "List your venue" from lg |
+| `layout/AuthButtons` | mock Sign In / Sign Up buttons (header + drawer) |
+| `layout/SiteFooter` | brand, link columns (plan an event, explore, venue owners, company/legal), copyright |
+| `legal/LegalDocumentView` | shared layout for policy pages (title, table of contents, numbered sections) — [[Legal-Pages]] |
+| `layout/PlannerNav` | planner tab bar (md and up) |
+| `layout/BottomNav` | fixed 6-tab nav on phones: Home(Dashboard), Moodboard, Budget, Guests, Tasks, Book for Me |
+| `layout/Container` | centered column with the app's gutters; sizes `narrow` / `form` / `medium` / `default` / `wide` |
+| `layout/BackLink` | "← Back to …" link used on inner pages |
+
+Full description of the shell and the per-page layouts: [[Layout-and-Responsive-Design]].
 
 ## Responsiveness
 
-Screens are mobile-first with centred max-width columns (`max-w-lg` for forms/lists, `max-w-4xl` for planner
-screens). The planner screens add `pb-24` to clear the fixed bottom nav. Both 375px and 1280px layouts were
-compared against the original — see [[Verification-Report]].
+Screens are mobile-first: the phone layout is the base and `sm:` / `md:` / `lg:` utilities add columns and wider
+containers. Widths and gutters come from `Container`, the chrome (header, footer, planner tabs, bottom nav) from the
+route-group layouts. Breakpoints, per-page layouts and the rules for new pages are in
+[[Layout-and-Responsive-Design]]; how it was checked is in [[Verification-Report]].

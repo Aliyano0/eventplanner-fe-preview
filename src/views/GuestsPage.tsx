@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { Search, Filter, CheckCircle, Clock, XCircle, Mail, Phone, Plus, MoreVertical, Pencil, Trash2, Copy } from "lucide-react";
-import BottomNav from "@/components/BottomNav";
-import TopBar from "@/components/TopBar";
+import { Container } from "@/components/layout/Container";
 import { sampleGuests } from "@/lib/data";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -86,13 +85,11 @@ const GuestsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <TopBar title="Guest List" />
-
-      <div className="px-4 pt-4 max-w-4xl mx-auto">
+    <div className="bg-background">
+      <Container className="pt-4 pb-10">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-bold text-foreground">Guest List</h2>
+            <h1 className="text-2xl font-bold text-foreground md:text-3xl">Guest List</h1>
             <p className="text-sm text-muted-foreground">{guests.length} total attendees</p>
           </div>
           <button onClick={openAdd} className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
@@ -101,7 +98,7 @@ const GuestsPage = () => {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-3 mb-4">
+        <div className="grid grid-cols-3 gap-3 mb-4 md:gap-4">
           <div className="bg-card rounded-xl border border-border p-3 text-center">
             <CheckCircle className="w-6 h-6 text-success mx-auto mb-1" />
             <p className="text-xl font-bold text-foreground">{confirmed}</p>
@@ -120,7 +117,7 @@ const GuestsPage = () => {
         </div>
 
         {/* Search */}
-        <div className="flex gap-2 mb-3">
+        <div className="flex gap-2 mb-3 md:max-w-md">
           <div className="flex-1 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
@@ -137,7 +134,7 @@ const GuestsPage = () => {
         </div>
 
         {/* Filters */}
-        <div className="flex gap-2 mb-4">
+        <div className="flex flex-wrap gap-2 mb-4">
           {filters.map((f) => (
             <button
               key={f}
@@ -154,13 +151,13 @@ const GuestsPage = () => {
         </div>
 
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-semibold text-foreground">All Guests ({filtered.length})</h3>
+          <h2 className="font-semibold text-foreground">All Guests ({filtered.length})</h2>
           <button onClick={() => { setInviteDialogOpen(true); setCopied(false); }} className="flex items-center gap-1 text-sm text-primary">
             <Mail className="w-4 h-4" /> Send Invites
           </button>
         </div>
 
-        <div className="space-y-3">
+        <div className="grid gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
           {filtered.map((guest) => (
             <div key={guest.id} className="bg-card rounded-xl border border-border p-4">
               <div className="flex items-start justify-between">
@@ -202,7 +199,7 @@ const GuestsPage = () => {
             </div>
           ))}
         </div>
-      </div>
+      </Container>
 
       {/* Add/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -314,8 +311,6 @@ const GuestsPage = () => {
           </div>
         </DialogContent>
       </Dialog>
-
-      <BottomNav />
     </div>
   );
 };

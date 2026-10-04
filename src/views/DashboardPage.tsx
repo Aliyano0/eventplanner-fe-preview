@@ -1,9 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
-import { DollarSign, CheckCircle, Users, CalendarDays, ArrowLeft, Sparkles, Menu } from "lucide-react";
-import BottomNav from "@/components/BottomNav";
+import { DollarSign, CheckCircle, Users, CalendarDays, Sparkles } from "lucide-react";
+import { BackLink } from "@/components/layout/BackLink";
+import { Container } from "@/components/layout/Container";
 import { setStoredValue, useStoredValue } from "@/hooks/use-local-storage";
 import { formatNumber } from "@/lib/format";
 import { sampleTasks } from "@/lib/data";
@@ -52,7 +52,7 @@ const DashboardPage = () => {
     : `${currencySymbol} 0`;
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="bg-background">
       <Dialog open={showBudgetSetup} onOpenChange={(open) => setBudgetDialogDismissed(!open)}>
         <DialogContent className="max-w-sm mx-auto">
           <DialogHeader>
@@ -80,30 +80,21 @@ const DashboardPage = () => {
         </DialogContent>
       </Dialog>
 
-      <div className="sticky top-0 bg-card/80 backdrop-blur-xs border-b border-border z-40">
-        <div className="flex items-center justify-between px-4 py-3 max-w-4xl mx-auto">
-          <div className="flex items-center gap-3">
-            <Menu className="w-5 h-5" />
-            <h1 className="font-semibold">Dashboard</h1>
+      <Container className="pt-4 pb-10">
+        <BackLink href="/services/wedding">Back to Services</BackLink>
+
+        <div className="mt-3 mb-4 flex items-start justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold tracking-widest text-muted-foreground">YOUR EVENT</p>
+            <h1 className="text-2xl font-bold text-foreground md:text-3xl">Dream Wedding</h1>
           </div>
-          <div className="w-10 h-10 rounded-full bg-success text-success-foreground flex items-center justify-center text-xs font-bold">
-            25<br/><span className="text-[8px]">DAYS</span>
+          <div className="flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-full bg-success text-xs font-bold leading-none text-success-foreground">
+            25
+            <span className="text-[8px]">DAYS</span>
           </div>
         </div>
-      </div>
 
-      <Link
-        href="/services/wedding"
-        className="flex w-fit items-center gap-1 px-4 pt-3 text-center text-sm text-primary hover:underline"
-      >
-        <ArrowLeft className="w-4 h-4" /> Back to Services
-      </Link>
-
-      <div className="px-4 pt-2 max-w-4xl mx-auto">
-        <p className="text-xs font-semibold tracking-widest text-muted-foreground">YOUR EVENT</p>
-        <h2 className="text-2xl font-bold text-foreground mb-4">Dream Wedding</h2>
-
-        <div className="grid grid-cols-2 gap-3 mb-4">
+        <div className="grid grid-cols-2 gap-3 mb-4 lg:grid-cols-4 lg:gap-4">
           <div className="bg-card rounded-xl border border-border p-4">
             <DollarSign className="w-8 h-8 text-primary p-1.5 bg-accent rounded-full mb-2" />
             <p className="text-xs font-semibold tracking-widest text-muted-foreground">BUDGET USED</p>
@@ -150,9 +141,7 @@ const DashboardPage = () => {
             ))}
           </div>
         </div>
-      </div>
-
-      <BottomNav />
+      </Container>
     </div>
   );
 };
