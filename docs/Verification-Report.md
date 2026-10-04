@@ -192,3 +192,30 @@ Dashboard at 1023px and 1024px; the 404 page at 375px.
 Not covered: real touch devices and phone browser toolbars (the sticky bar was checked in desktop Chromium at phone
 sizes), landscape phones (≥ 768px wide, so they get the tablet bar — about 106px of chrome on a 390px-tall screen), and
 browsers other than Chromium.
+
+---
+
+## Menu button in the bottom nav, drawer from the right
+
+Checks for the change in [[Layout-and-Responsive-Design]]: the hamburger moved from the top bar into the **right corner of
+the bottom nav**, the drawer slides in **from the right**, one tab per context made room for it (Moodboard on planner
+screens, List Venue on site pages) and the drawer no longer repeats anything the bottom nav shows. Desktop is unchanged.
+This **supersedes the tab sets and the top-left menu button** described in the previous section. Run on a clean production
+build.
+
+| Check | Result |
+| --- | --- |
+| **Responsive QA**: 18 routes × 7 widths = 126 combinations; now also asserts the menu button is in the bottom nav and is its right-most item (below 1024px), is in the header only on the setup wizard / venue form, and is absent from 1024px up | ✅ **126/126** |
+| **Behaviour flows**: the earlier flows (the old "six tabs" flow and the drawer flow updated) + 5 new — menu button is the right-most bottom-nav item and the drawer's left edge moves monotonically right → left (sampled 368 → 119px on a 375px screen) ending flush with the right edge; for 7 route/width combinations (site page, Home, planner screens incl. Moodboard, tablet) **no bottom-nav link is repeated in the drawer**, and Moodboard is reachable from the menu on planner screens; the exact drawer entries for planner and site pages; the menu button at the right end of the top bar on the wizard and venue form (full drawer); no menu button on desktop | ✅ **41/41** |
+| Unit tests (`nav-config.test.ts`): tab sets, active tab per route, drawer entries per context, **no repeated destination on 17 route kinds**, every destination still reachable from the bottom nav or the menu | ✅ Vitest **61/61** |
+| `next dev` console on 18 routes × 2 storage states (locale/timezone different from the server's) | ✅ 0 warnings, 0 hydration errors |
+| `tsc --noEmit` · ESLint · `next build` | ✅ clean · clean · 25 static pages |
+
+Viewed by eye: Budget (menu in the corner, drawer open), Venues (drawer open), the setup wizard (menu in the top bar) at 375px;
+Venues (drawer open) and Dashboard at 768px; Dashboard at 1024px (unchanged).
+
+Note for the test scripts: while the drawer is open Radix marks the rest of the page `aria-hidden`, so the menu button
+cannot be found by role during that time — expected modal behaviour, not a defect.
+
+Not covered: real touch devices, the swipe-to-close gesture (the sheet only closes by tapping the overlay, the ✕ or Escape),
+and browsers other than Chromium.

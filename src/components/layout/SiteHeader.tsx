@@ -2,72 +2,34 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
 import { Menu, Search, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { AuthButtons } from "./AuthButtons";
 import { Container } from "./Container";
-import { BRAND_NAME, drawerNav, mainNav, titleFor } from "./nav-config";
-
-const drawerItemClassName =
-  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-center text-sm font-medium text-foreground hover:bg-accent transition-colors";
+import { useNavDrawer } from "./NavDrawer";
+import { BRAND_NAME, bottomNavFor, mainNav, titleFor } from "./nav-config";
 
 /**
- * Site-wide sticky header. Navigation below `lg` is the sticky `BottomNav`, so the bar stays light there.
+ * Site-wide sticky header. Navigation below `lg` is the sticky `BottomNav` (tabs + the menu button in its right
+ * corner), so the bar stays light there.
  *
- * - Phones (< md): compact bar — drawer button, current page title, search (the app's original top bar).
- * - Tablets (md–lg): drawer button, logo, Sign In / Sign Up.
+ * - Phones (< md): compact bar — current page title, search (the app's original top bar).
+ * - Tablets (md–lg): logo, Sign In / Sign Up.
  * - lg and up: logo, primary navigation with active state, "List your venue", Sign In / Sign Up.
+ *
+ * Pages without a bottom nav (the planner setup wizard, venue registration) get the menu button here instead,
+ * at the right end of the bar.
  */
 export function SiteHeader() {
   const pathname = usePathname();
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const { setOpen } = useNavDrawer();
+  const menuInHeader = bottomNavFor(pathname) === null;
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-card/80 backdrop-blur-xs">
       <Container size="wide" className="flex h-12 items-center justify-between gap-4 md:h-16">
         <div className="flex items-center gap-3">
-          <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
-            <SheetTrigger asChild>
-              <button className="-ml-1 rounded-md p-1 transition-colors hover:bg-muted lg:hidden" aria-label="Open menu">
-                <Menu className="h-5 w-5 text-foreground" />
-              </button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-64 p-0">
-              <div className="border-b border-border p-5">
-                <SheetTitle className="text-lg font-bold text-foreground">{BRAND_NAME}</SheetTitle>
-                <SheetDescription className="text-xs text-muted-foreground">Plan your perfect event</SheetDescription>
-              </div>
-              <nav className="space-y-1 p-3" aria-label="Menu">
-                {drawerNav.map((item) =>
-                  item.path.startsWith("#") ? (
-                    // Placeholder entries (no route yet): just close the drawer.
-                    <button key={item.label} onClick={() => setDrawerOpen(false)} className={drawerItemClassName}>
-                      <item.icon className="h-5 w-5 text-muted-foreground" />
-                      {item.label}
-                    </button>
-                  ) : (
-                    <Link
-                      key={item.label}
-                      href={item.path}
-                      onClick={() => setDrawerOpen(false)}
-                      className={drawerItemClassName}
-                    >
-                      <item.icon className="h-5 w-5 text-muted-foreground" />
-                      {item.label}
-                    </Link>
-                  ),
-                )}
-              </nav>
-              {/* Tablets already show Sign In / Sign Up in the header bar */}
-              <div className="border-t border-border p-3 md:hidden">
-                <AuthButtons layout="stacked" onAction={() => setDrawerOpen(false)} />
-              </div>
-            </SheetContent>
-          </Sheet>
-
           {/* Phones: page title */}
           <span className="font-semibold text-foreground md:hidden">{titleFor(pathname)}</span>
 
@@ -107,6 +69,17 @@ export function SiteHeader() {
             <Link href="/manage-venue">List your venue</Link>
           </Button>
           <AuthButtons className="hidden md:flex" />
+          {menuInHeader && (
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              aria-label="Open menu"
+              aria-haspopup="dialog"
+              className="-mr-1 rounded-md p-1 transition-colors hover:bg-muted lg:hidden"
+            >
+              <Menu className="h-5 w-5 text-foreground" />
+            </button>
+          )}
         </div>
       </Container>
     </header>

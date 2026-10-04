@@ -31,9 +31,10 @@ event handlers that aren't plain navigation, or browser APIs.**
 | --- | --- |
 | `app/providers.tsx` | Radix `TooltipProvider`, toast/Sonner state |
 | `app/not-found.tsx` | `usePathname()` to log the missing path |
-| `components/layout/SiteHeader.tsx` | drawer open/close state, `usePathname()` for the title and active link |
+| `components/layout/SiteHeader.tsx` | `usePathname()` for the title and active link, `useNavDrawer()` for the menu button shown on pages without a bottom nav |
+| `components/layout/NavDrawer.tsx` | drawer open/close state (context provider) and the Radix sheet; `usePathname()` to pick the menu entries |
 | `components/layout/AuthButtons.tsx` | click handlers (mock Sign In / Sign Up show a toast) |
-| `components/layout/PlannerNav.tsx`, `components/layout/BottomNav.tsx` | `usePathname()` for the active tab |
+| `components/layout/PlannerNav.tsx`, `components/layout/BottomNav.tsx` | `usePathname()` for the active tab; `BottomNav` also opens the drawer |
 | `views/HomePage`, `DashboardPage`, `BudgetPage`, `GuestsPage`, `TasksPage`, `MoodboardPage`, `VenuesPage`, `PlannerSetupPage`, `VenueRegistrationPage` | `useState`, dialogs, forms, `localStorage` |
 | shadcn files using hooks/context (`form`, `sidebar`, `carousel`, `chart`, `toaster`, `sonner`, `input-otp`, `toggle-group`, `calendar`, `use-toast`) | marked `"use client"` at the top |
 

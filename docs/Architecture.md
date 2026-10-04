@@ -41,7 +41,7 @@ Frontend/
    │     └─ <route>/page.tsx   one per URL, see [[Routing-Map]]
    ├─ views/                   the screens (formerly src/pages in the original project)
    ├─ components/
-   │  ├─ layout/               app shell: SiteHeader, SiteFooter, PlannerNav, BottomNav, AuthButtons, Container, BackLink, nav-config
+   │  ├─ layout/               app shell: SiteHeader, SiteFooter, PlannerNav, BottomNav, NavDrawer (menu drawer + open state), AuthButtons, Container, BackLink, nav-config
    │  ├─ legal/                LegalDocumentView (shared policy-page layout), RichText
    │  └─ ui/                   shadcn kit
    ├─ content/                 long-form copy as data: about.ts, legal/{terms,cookie-policy}.ts — see [[Legal-Pages]]
@@ -66,12 +66,13 @@ each page. Details, breakpoints and per-page layouts: [[Layout-and-Responsive-De
 
 ```
 RootLayout            <body class="flex min-h-screen flex-col">
- ├─ SiteHeader         sticky, all pages
+ ├─ Providers           includes NavDrawerProvider: the menu drawer (slides in from the right) + its open state
+ ├─ SiteHeader          sticky, all pages (menu button only where there is no bottom nav)
  ├─ (site) layout   or   (planner) layout
- │    ├─ [PlannerNav]    lg+ only, planner pages
- │    ├─ <main flex-1>   the page (a view inside Container)
+ │    ├─ [PlannerNav]     lg+ only, planner pages
+ │    ├─ <main flex-1>    the page (a view inside Container)
  │    └─ SiteFooter
- └─ BottomNav          below lg only; sticky, last element; tabs chosen per route (bottomNavFor)
+ └─ BottomNav           below lg only; sticky, last element; tabs per route (bottomNavFor) + menu button in the right corner
 ```
 
 ## Request lifecycle

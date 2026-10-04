@@ -45,25 +45,6 @@ export const mainNav: NavItem[] = [
   { label: "My Planner", href: "/dashboard", icon: LayoutDashboard, isActive: isPlannerPath },
 ];
 
-export interface DrawerItem {
-  label: string;
-  /** `#…` entries are placeholders without a route yet: they only close the drawer. */
-  path: string;
-  icon: LucideIcon;
-}
-
-/** Entries of the mobile drawer. */
-export const drawerNav: DrawerItem[] = [
-  { label: "Home", icon: Home, path: "/" },
-  { label: "Venues", icon: Building2, path: "/venues" },
-  { label: "Vendors", icon: Users, path: "/vendors" },
-  { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-  { label: "New Event", icon: PlusCircle, path: "/planner-setup/wedding" },
-  { label: "List Your Venue", icon: Store, path: "/manage-venue" },
-  { label: "Profile", icon: User, path: "#profile" },
-  { label: "Settings", icon: Settings, path: "#settings" },
-];
-
 export interface PlannerTab {
   href: string;
   /** Label on the desktop tab bar. */
@@ -71,24 +52,22 @@ export interface PlannerTab {
   /** Shorter label on the phone bottom nav. */
   shortLabel: string;
   icon: LucideIcon;
+  /**
+   * Whether the phone / tablet bottom nav shows this tab. The bottom nav is the menu button plus five tabs, so a tab
+   * that doesn't fit lives in the menu drawer instead (see `drawerNavFor`). The desktop tab bar shows all six.
+   */
+  inBottomNav: boolean;
 }
 
-/** Tabs of the planner area: bottom nav on phones and tablets, tab bar from `lg` up. */
+/** Tabs of the planner area: bottom nav on phones and tablets (minus `inBottomNav: false`), tab bar from `lg` up. */
 export const plannerTabs: PlannerTab[] = [
-  { href: "/dashboard", label: "Dashboard", shortLabel: "Home", icon: Home },
-  { href: "/moodboard", label: "Moodboard", shortLabel: "Moodboard", icon: Image },
-  { href: "/budget", label: "Budget", shortLabel: "Budget", icon: DollarSign },
-  { href: "/guests", label: "Guests", shortLabel: "Guests", icon: Users },
-  { href: "/tasks", label: "Tasks", shortLabel: "Tasks", icon: CheckSquare },
-  { href: "/book", label: "Book for Me", shortLabel: "Book for Me", icon: Sparkles },
+  { href: "/dashboard", label: "Dashboard", shortLabel: "Home", icon: Home, inBottomNav: true },
+  { href: "/moodboard", label: "Moodboard", shortLabel: "Moodboard", icon: Image, inBottomNav: false },
+  { href: "/budget", label: "Budget", shortLabel: "Budget", icon: DollarSign, inBottomNav: true },
+  { href: "/guests", label: "Guests", shortLabel: "Guests", icon: Users, inBottomNav: true },
+  { href: "/tasks", label: "Tasks", shortLabel: "Tasks", icon: CheckSquare, inBottomNav: true },
+  { href: "/book", label: "Book for Me", shortLabel: "Book for Me", icon: Sparkles, inBottomNav: true },
 ];
-
-const listVenueNav: NavItem = {
-  label: "List Venue",
-  href: "/manage-venue",
-  icon: Store,
-  isActive: (p) => startsWithPath(p, "/manage-venue") || startsWithPath(p, "/venue-registration"),
-};
 
 /** Multi-step flows that own the bottom of the screen with their own actions: no bottom nav there. */
 const BOTTOM_NAV_HIDDEN_PATHS = ["/planner-setup", "/venue-registration"] as const;
@@ -101,41 +80,94 @@ export interface BottomTab {
 }
 
 export interface BottomNavConfig {
+  /** `planner` on the planner screens, `site` everywhere else. */
+  kind: "planner" | "site";
   /** Accessible name of the `<nav>`. */
   label: string;
+  /** The tabs after the menu button (which is always first and is not part of this list). */
   tabs: BottomTab[];
 }
 
 /**
- * What the app-style bottom nav (phones and tablets) shows for a path, or `null` when it is hidden.
- * - planner screens: the six planner tabs (the original app's bottom nav);
- * - every other page: the site-wide tabs (Home, Venues, Vendors, My Planner, List Venue);
- * - the planner setup wizard and venue registration form: none.
+ * What the app-style bottom nav (phones and tablets) shows for a path, or `null` when it is hidden. The nav is always
+ * "menu button + tabs":
+ * - planner screens: five planner tabs (Home, Budget, Guests, Tasks, Book for Me — Moodboard is in the menu);
+ * - every other page: four site tabs (Home, Venues, Vendors, My Planner — List Venue is in the menu);
+ * - the planner setup wizard and venue registration form: none (the menu button moves to the top bar there).
  */
 export function bottomNavFor(pathname: string): BottomNavConfig | null {
   if (BOTTOM_NAV_HIDDEN_PATHS.some((base) => startsWithPath(pathname, base))) return null;
 
   if (PLANNER_PATHS.some((base) => startsWithPath(pathname, base))) {
     return {
+      kind: "planner",
       label: "My Planner",
-      tabs: plannerTabs.map((tab) => ({
-        href: tab.href,
-        label: tab.shortLabel,
-        icon: tab.icon,
-        active: pathname === tab.href,
-      })),
+      tabs: plannerTabs
+        .filter((tab) => tab.inBottomNav)
+        .map((tab) => ({ href: tab.href, label: tab.shortLabel, icon: tab.icon, active: pathname === tab.href })),
     };
   }
 
   return {
+    kind: "site",
     label: "Main",
-    tabs: [...mainNav, listVenueNav].map((item) => ({
+    tabs: mainNav.map((item) => ({
       href: item.href,
       label: item.label,
       icon: item.icon,
       active: item.isActive(pathname),
     })),
   };
+}
+
+export interface DrawerItem {
+  label: string;
+  /** `#…` entries are placeholders without a route yet: they only close the drawer. */
+  path: string;
+  icon: LucideIcon;
+}
+
+const drawerItems = {
+  home: { label: "Home", icon: Home, path: "/" },
+  venues: { label: "Venues", icon: Building2, path: "/venues" },
+  vendors: { label: "Vendors", icon: Users, path: "/vendors" },
+  dashboard: { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
+  newEvent: { label: "New Event", icon: PlusCircle, path: "/planner-setup/wedding" },
+  listVenue: { label: "List Your Venue", icon: Store, path: "/manage-venue" },
+  profile: { label: "Profile", icon: User, path: "#profile" },
+  settings: { label: "Settings", icon: Settings, path: "#settings" },
+} satisfies Record<string, DrawerItem>;
+
+/**
+ * Entries of the menu drawer for a path: every destination **except the ones that are already tabs of the bottom nav on
+ * that page**, so the same link is never offered twice.
+ * - site pages: New Event, List Your Venue, Profile, Settings;
+ * - planner screens: the planner tab that didn't fit the bottom nav (Moodboard), then the way back out — the site home
+ *   (named "EventPlan Home", since the bottom nav's "Home" tab is the dashboard here), Venues, Vendors — and the rest;
+ * - the setup wizard and venue form (no bottom nav): everything.
+ */
+export function drawerNavFor(pathname: string): DrawerItem[] {
+  const bottom = bottomNavFor(pathname);
+  const inPlanner = bottom?.kind === "planner";
+
+  const overflowedPlannerTabs: DrawerItem[] = inPlanner
+    ? plannerTabs.filter((tab) => !tab.inBottomNav).map((tab) => ({ label: tab.label, icon: tab.icon, path: tab.href }))
+    : [];
+
+  const candidates: DrawerItem[] = [
+    ...overflowedPlannerTabs,
+    inPlanner ? { ...drawerItems.home, label: "EventPlan Home" } : drawerItems.home,
+    drawerItems.venues,
+    drawerItems.vendors,
+    drawerItems.dashboard,
+    drawerItems.newEvent,
+    drawerItems.listVenue,
+    drawerItems.profile,
+    drawerItems.settings,
+  ];
+
+  const inBottomNav = new Set(bottom?.tabs.map((tab) => tab.href));
+  return candidates.filter((item) => !inBottomNav.has(item.path));
 }
 
 /** Page title shown in the phone header (matches each route's `metadata.title`). */
