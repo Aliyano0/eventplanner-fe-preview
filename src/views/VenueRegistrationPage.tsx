@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Upload } from "lucide-react";
+import { Container } from "@/components/layout/Container";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -78,8 +79,8 @@ const VenueRegistrationPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="px-4 py-4">
+    <div className="bg-background">
+      <Container size="form" className="py-4">
         <button
           onClick={() => router.back()}
           className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
@@ -87,20 +88,20 @@ const VenueRegistrationPage = () => {
           <ArrowLeft className="w-4 h-4" />
           Back
         </button>
-      </div>
+      </Container>
 
-      <div className="max-w-lg mx-auto px-4 pb-8 space-y-6">
-        <div className="rounded-xl border border-border bg-card p-6 space-y-6">
+      <Container size="narrow" className="pb-8 md:max-w-3xl">
+        <div className="rounded-xl border border-border bg-card p-6 space-y-6 md:p-8">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Venue Registration Form</h1>
+            <h1 className="text-2xl font-bold text-foreground md:text-3xl">Venue Registration Form</h1>
             <p className="text-sm text-muted-foreground mt-1">
               Please provide detailed information about your venue
             </p>
           </div>
 
           {/* Venue Information */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-foreground">Venue Information</h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            <h2 className="text-lg font-semibold text-foreground md:col-span-2">Venue Information</h2>
 
             <div className="space-y-2">
               <Label>Venue Name *</Label>
@@ -126,7 +127,7 @@ const VenueRegistrationPage = () => {
               </Select>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 md:col-span-2">
               <div className="space-y-2">
                 <Label>City *</Label>
                 <Input placeholder="Enter city" value={city} onChange={(e) => setCity(e.target.value)} />
@@ -137,12 +138,12 @@ const VenueRegistrationPage = () => {
               </div>
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 md:col-span-2">
               <Label>Address *</Label>
               <Input placeholder="Enter complete address" value={address} onChange={(e) => setAddress(e.target.value)} />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-y-2 md:col-span-2">
               <Label>Description *</Label>
               <Textarea
                 placeholder="Describe your venue, its unique features, and what makes it special..."
@@ -247,7 +248,7 @@ const VenueRegistrationPage = () => {
             Submit Registration
           </Button>
         </div>
-      </div>
+      </Container>
     </div>
   );
 };

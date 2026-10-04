@@ -10,19 +10,38 @@ deliberate "not now". Context: [[Vite-to-Next-Migration]], [[Verification-Report
 
 ## Needs a decision (changes visible behaviour)
 
-1. **Budget "edit total" overflows on a 375px phone.** While editing, the input row is wider than the screen and
-   the page scrolls sideways (layout viewport grows to ~476px). This is how the **original** Lovable app behaves, so
-   it was preserved. Likely fix: `min-w-0` on the input in `views/BudgetPage.tsx`. The repo rule is that all pages
-   must be responsive on all devices, so this is probably worth fixing.
+1. ~~Budget "edit total" overflows on a 375px phone~~ — **fixed** in the responsive layout work (`min-w-0` on the
+   input; the Guests filter chips and the Dashboard countdown badge were fixed the same way). See
+   [[Layout-and-Responsive-Design]].
 2. **Touch hover behaviour.** Tailwind v4 applies `hover:` only on hover-capable devices, so a tapped button no
    longer keeps its hover colour. That is the better behaviour and is *not* reverted. For strict v3 parity add
    `@custom-variant hover (&:hover);` to `globals.css` ([[Tailwind-v4-Compatibility]]).
 3. **Locale / timezone normalisation** (numbers `en-US`, task dates in UTC — [[Vite-to-Next-Migration]] #4, #5).
    Confirm you are happy with these; both were needed for server rendering.
 
+## Header / footer follow-ups ([[Layout-and-Responsive-Design]])
+
+- ~~About, Terms and Cookie Policy pages~~ — **built** from the client PDF and linked in the footer, verified word for
+  word: [[Legal-Pages]]. Still open there: legal sign-off by the client, an effective date, a way to contact the company,
+  and the three further policy texts in the same PDF (Vendor Guidelines, Review Guidelines, Marketplace Rules — the Terms
+  refer to the Review Guidelines).
+- **Cookie consent banner / Cookie Settings tool.** The Cookie Policy describes them (accept all, reject non-essential,
+  manage preferences) but they don't exist; build them (and make sure no non-essential cookies load before consent) before
+  publishing the policy.
+- **Contact details / social links.** None appear in the client documents, so the footer has none. Send them when
+  available.
+- **Sign In / Sign Up buttons** are mocks (they show "coming soon"). Real authentication needs NextAuth + the backend auth
+  endpoints (PRD F3); replace the handler in `components/layout/AuthButtons.tsx`. The welcome dialog on Home is a separate
+  local prototype and could be wired to the same flow.
+- **Active-link rules** in `nav-config.ts` treat `/services/*` as "Home" and the setup wizard as "My Planner"; adjust if
+  the client's Figma navigation differs.
+- **Figma.** The client's Figma is the visual source of truth (PRD §2) but was not available; the header, footer and
+  desktop layouts follow the existing design language. Re-check against Figma when it is shared.
+- Planner screens still show the same sample data on desktop; no new desktop-only content was invented.
+
 ## Known pre-existing issues (not introduced by the migration)
 
-- **Accessibility:** Radix warns that some dialogs lack a `DialogTitle` (Budget category dialog, the TopBar drawer)
+- **Accessibility:** Radix warns that some dialogs lack a `DialogTitle` (Budget category dialog)
   or `Description` (Guests/Tasks dialogs). The warnings are visible in the original app's console; Next's
   production build hides them but the markup is the same. Fix with `DialogTitle`/`SheetTitle` (visually hidden
   where the design has no heading).
@@ -38,7 +57,7 @@ deliberate "not now". Context: [[Vite-to-Next-Migration]], [[Verification-Report
 - **`lucide-react`** is pinned to `0.462.0`; upgrading redraws some icons (check with the parity comparison first).
 - **Vitest 3 → 5** clears the dev-only audit advisory — [[Dependencies]].
 - `sonner@1`, `recharts@2`, `zod@3`, `date-fns@3`, `react-resizable-panels@2` have newer majors; none is needed now.
-- Typed routes (`typedRoutes`) were not enabled; `BottomNav`/`TopBar` use string paths.
+- Typed routes (`typedRoutes`) were not enabled; the navigation components use string paths from `nav-config.ts`.
 - Remote images (`Moodboard`, `Venues`) are plain `<img>`; switch to `next/image` with `remotePatterns` once real
   media URLs and dimensions exist (PRD §13.6, F2).
 - SEO (PRD F7): `metadataBase`, canonical URLs, sitemap, OG images, structured data.

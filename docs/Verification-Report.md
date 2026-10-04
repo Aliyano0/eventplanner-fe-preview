@@ -8,6 +8,11 @@ date: 2026-10-03
 
 Part of [[00-Home]]. Context: [[Vite-to-Next-Migration]], [[Tailwind-v4-Compatibility]]. Open items: [[Follow-ups]].
 
+> **Scope note.** The original-vs-migrated comparison below describes the migration commit (`f62efa9`). The layouts were
+> intentionally changed afterwards (header, footer, responsive grids), so that comparison no longer applies to today's
+> screens. The checks for that later work are in [Responsive shell and layouts](#responsive-shell-and-layouts) at the
+> end of this note.
+
 **Requirement:** every page stays exactly as it was; no UI/UX breakage.
 **Method:** run the *original* Lovable app and the *migrated* app side by side in the same headless Chromium and
 compare them mechanically, rather than by eye.
@@ -101,3 +106,65 @@ The harness is a Playwright script that snapshots each scenario in both apps, a 
 by cause, a pixel differ, and the 20-flow script. It lives outside the repo; see [[Follow-ups]] for the option to
 add it as an `e2e/` suite. To re-run by hand: build both apps, serve them on two ports, run the snapshot script
 against each, then diff.
+
+---
+
+## Responsive shell and layouts
+
+Checks for the work described in [[Layout-and-Responsive-Design]] (site header, footer, planner tab bar, responsive
+pages), run on a clean production build.
+
+| Check | Result |
+| --- | --- |
+| **Responsive QA**: 15 routes × 6 widths (320, 375, 768, 1024, 1280, 1536) = 90 combinations. Each must have no horizontal overflow, a header and footer, exactly one `<h1>`, the footer below the content, the right chrome for the width (drawer + bottom nav below 768; header links + planner tabs from 768) and no console errors | ✅ **90/90** |
+| **Behaviour flows** (real clicks): the 20 flows from the migration check, updated for the new chrome, plus 5 new ones — desktop header navigation and active state, desktop planner tabs, footer links, tablet 768, and the phone drawer / footer-not-covered-by-bottom-nav | ✅ **25/25** |
+| **Phone layout vs the original app** (375px, all 39 states): every text-bearing element of the original must still exist with the same width, height and x position | ✅ 22/39 identical; the other 17 differ only by deliberate changes (below) |
+| `next dev` console on 15 routes × 2 storage states (locale/timezone different from the server's) | ✅ 0 warnings, 0 hydration errors |
+| `tsc --noEmit` (strict) · ESLint · Vitest · `next build` | ✅ clean · clean · 8/8 · 22 static pages |
+
+### The 17 phone-layout differences (all intentional)
+
+| States | What differs | Why |
+| --- | --- | --- |
+| Back links on Services, Venues, Vendors, Planner setup (9) | the link box is now `x=16` instead of a full-width `x=0` button with 16px inner padding | the 16px moved to the page container; the **text still starts at x=16** |
+| Dashboard (2) | custom header gone; title now in the global header; "25 DAYS" badge stacked and moved into the title row | one header for the whole app |
+| Guests (5, includes the above `Declined` chip) | the last filter chip wraps to a second line at 375px | the original row overflowed phones narrower than ~381px |
+| Budget "edit total" (1) | bottom-nav items no longer stretch | the original page widened to 476px in edit mode (fixed with `min-w-0`) |
+
+### Responsive findings fixed during the work
+
+- Guests filter chips overflowed ≤ 380px (also in the original) → `flex-wrap`.
+- Budget edit-mode input overflowed 375px (also in the original) → `min-w-0`.
+- Dashboard countdown badge rendered `25DAYS` on one line (also in the original) → stacked.
+- Planner footer is padded on phones so the fixed bottom nav never covers it.
+- Stale route-type files left in `.next/dev` by an earlier dev run broke `tsc` after the routes moved into route groups
+  (build artefact, not code; delete `.next` after moving routes).
+
+### Not covered
+
+- Screenshots were reviewed by eye for Home (phone + desktop, both tabs), Dashboard, Budget, Venues, Guests (768),
+  Tasks, Services (1024), Planner setup and Venue registration. The remaining page/width combinations were checked
+  by the automated assertions above, not visually.
+- Hover, focus and active states; browsers other than Chromium; real touch devices.
+- The 320px width is checked for overflow only; very small phones may still want copy tweaks.
+
+---
+
+## Legal pages and mock auth buttons
+
+Checks for [[Legal-Pages]] and the Sign In / Sign Up buttons, run on a clean production build.
+
+| Check | Result |
+| --- | --- |
+| **Text fidelity**: the rendered pages compared word for word with the text extracted from the client PDF (About, Terms, Cookie Policy) | ✅ 274 / 769 / 332 words — all identical |
+| **Responsive QA**: now 18 routes × 6 widths (320–1536) = 108 combinations (no overflow, header + footer, one `<h1>`, right chrome for the width, no console errors) | ✅ **108/108** |
+| **Behaviour flows**: the 25 earlier flows + 6 new — footer links open the three pages with the right headings/section counts; the Terms contents link jumps to its section; the phone contents disclosure; mock Sign In/Up on desktop, on a 768px tablet (no overflow, "List your venue" hidden below `lg`) and in the phone drawer | ✅ **31/31** |
+| `next dev` console on 18 routes × 2 storage states (locale/timezone different from the server's) | ✅ 0 warnings, 0 hydration errors |
+| `tsc --noEmit` · ESLint · Vitest · `next build` | ✅ clean · clean · 18/18 (adds legal-content structure + `RichText` tests) · 25 static pages |
+
+Viewed by eye: Terms at 1280px and 375px, About at 768px (which also shows the header at its tightest width: brand, four
+links, Sign In and Sign Up).
+
+Not covered: the PDF check proves the *text* matches, not that the text is legally sufficient (see [[Legal-Pages]]);
+hover/focus states; browsers other than Chromium; real devices. The earlier original-vs-migrated comparison was not
+re-run (the layouts have intentionally changed since).

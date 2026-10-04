@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import TopBar from "@/components/TopBar";
-import BottomNav from "@/components/BottomNav";
+import { Container } from "@/components/layout/Container";
 import { Calendar, Flag, Plus, CheckCircle2, Circle, MoreVertical, Pencil, Trash2 } from "lucide-react";
 import {
   Dialog,
@@ -177,9 +176,7 @@ const TasksPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <TopBar title="Tasks" />
-
+    <div className="bg-background">
       {/* Add/Edit Dialog */}
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent className="max-w-sm mx-auto">
@@ -253,11 +250,11 @@ const TasksPage = () => {
         </DialogContent>
       </Dialog>
 
-      <div className="px-4 py-4 max-w-4xl mx-auto space-y-5">
+      <Container className="space-y-5 pt-4 pb-10">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-foreground">Tasks</h2>
+            <h1 className="text-2xl font-bold text-foreground md:text-3xl">Tasks</h1>
             <p className="text-sm text-muted-foreground">
               {activeTasks.length} pending, {completedTasks.length} completed
             </p>
@@ -287,42 +284,43 @@ const TasksPage = () => {
           </p>
         </div>
 
-        {/* Active Tasks */}
-        <div className="space-y-3">
-          <h3 className="font-semibold text-foreground">Active Tasks</h3>
-          {activeTasks.map((task) => (
-            <TaskCard key={task.id} task={task} onToggle={toggleTask} onEdit={openEdit} onDelete={deleteTask} />
-          ))}
-        </div>
-
-        {/* Completed Tasks */}
-        <div className="space-y-3">
-          <button
-            onClick={() => setShowCompleted(!showCompleted)}
-            className="flex items-center justify-between w-full"
-          >
-            <h3 className="font-semibold text-muted-foreground">
-              Completed Tasks ({completedTasks.length})
-            </h3>
-            <span className="text-sm text-muted-foreground">
-              {showCompleted ? "Hide" : "Show"}
-            </span>
-          </button>
-          {showCompleted &&
-            completedTasks.map((task) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                completed
-                onToggle={toggleTask}
-                onEdit={openEdit}
-                onDelete={deleteTask}
-              />
+        {/* Active + completed tasks (side by side from lg) */}
+        <div className="space-y-5 lg:grid lg:grid-cols-2 lg:items-start lg:gap-6 lg:space-y-0">
+          {/* Active Tasks */}
+          <div className="space-y-3">
+            <h2 className="font-semibold text-foreground">Active Tasks</h2>
+            {activeTasks.map((task) => (
+              <TaskCard key={task.id} task={task} onToggle={toggleTask} onEdit={openEdit} onDelete={deleteTask} />
             ))}
-        </div>
-      </div>
+          </div>
 
-      <BottomNav />
+          {/* Completed Tasks */}
+          <div className="space-y-3">
+            <button
+              onClick={() => setShowCompleted(!showCompleted)}
+              className="flex items-center justify-between w-full"
+            >
+              <h2 className="font-semibold text-muted-foreground">
+                Completed Tasks ({completedTasks.length})
+              </h2>
+              <span className="text-sm text-muted-foreground">
+                {showCompleted ? "Hide" : "Show"}
+              </span>
+            </button>
+            {showCompleted &&
+              completedTasks.map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  completed
+                  onToggle={toggleTask}
+                  onEdit={openEdit}
+                  onDelete={deleteTask}
+                />
+              ))}
+          </div>
+        </div>
+      </Container>
     </div>
   );
 };

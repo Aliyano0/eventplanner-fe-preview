@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Sparkles, ChevronRight, CalendarDays, Building2, CheckCircle2, DollarSign, Info } from "lucide-react";
 import heroImage from "@/assets/hero-event.jpg";
+import { Container } from "@/components/layout/Container";
 import { setStoredValue, useStoredValue } from "@/hooks/use-local-storage";
 import { eventTypes } from "@/lib/data";
 import {
@@ -53,7 +54,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
       {/* Auth Dialog */}
       <Dialog open={showAuthDialog} onOpenChange={(open) => setAuthDismissed(!open)}>
         <DialogContent className="max-w-sm">
@@ -175,7 +176,7 @@ const HomePage = () => {
       </Dialog>
 
       {/* Hero Section */}
-      <div className="relative h-72 overflow-hidden">
+      <div className="relative h-72 overflow-hidden md:h-96 lg:h-[26rem]">
         <Image
           src={heroImage}
           alt="Event planning"
@@ -186,11 +187,11 @@ const HomePage = () => {
         />
         <div className="absolute inset-0 bg-linear-to-b from-black/30 via-black/40 to-background" />
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-          <div className="w-12 h-12 rounded-full bg-card/20 backdrop-blur-xs flex items-center justify-center mb-4">
-            <Sparkles className="w-6 h-6 text-primary-foreground" />
+          <div className="w-12 h-12 rounded-full bg-card/20 backdrop-blur-xs flex items-center justify-center mb-4 md:h-16 md:w-16">
+            <Sparkles className="w-6 h-6 text-primary-foreground md:h-8 md:w-8" />
           </div>
-          <h1 className="text-3xl font-bold text-primary-foreground mb-2">EventPlan</h1>
-          <p className="text-primary-foreground/80 text-sm">
+          <h1 className="text-3xl font-bold text-primary-foreground mb-2 md:text-5xl">EventPlan</h1>
+          <p className="text-primary-foreground/80 text-sm md:text-lg">
             Let&apos;s create something unforgettable together
           </p>
         </div>
@@ -198,7 +199,7 @@ const HomePage = () => {
 
       {/* Tab Switcher */}
       {authenticated && (
-        <div className="px-4 pt-6 max-w-lg mx-auto">
+        <Container size="narrow" className="pt-6">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="w-full grid grid-cols-2">
               <TabsTrigger value="planning" className="gap-2">
@@ -211,16 +212,16 @@ const HomePage = () => {
               </TabsTrigger>
             </TabsList>
           </Tabs>
-        </div>
+        </Container>
       )}
 
       {/* Content based on active tab */}
       {authenticated && activeTab === "planning" && (
-        <div className="px-4 py-6 max-w-lg mx-auto">
+        <Container size="medium" className="max-w-lg py-6 md:max-w-4xl md:py-10">
           <p className="text-xs font-semibold tracking-widest text-muted-foreground mb-4">
             CHOOSE YOUR EVENT
           </p>
-          <div className="space-y-3">
+          <div className="grid gap-3 md:grid-cols-2 md:gap-4">
             {eventTypes.map((event) => (
               <Link
                 key={event.id}
@@ -238,14 +239,11 @@ const HomePage = () => {
               </Link>
             ))}
           </div>
-          <p className="text-center text-xs text-muted-foreground mt-8">
-            Crafted with care for your special moments
-          </p>
-        </div>
+        </Container>
       )}
 
       {authenticated && activeTab === "venue" && (
-        <div className="px-4 py-6 max-w-lg mx-auto space-y-6">
+        <Container size="medium" className="grid max-w-lg gap-6 py-6 md:max-w-4xl md:grid-cols-2 md:py-10">
           {/* How It Works */}
           <div className="rounded-xl border border-primary/20 bg-primary/5 p-5 space-y-3">
             <h2 className="font-bold text-foreground text-lg">How It Works</h2>
@@ -266,7 +264,7 @@ const HomePage = () => {
           </div>
 
           {/* Pricing Structure */}
-          <div className="rounded-xl border border-warning/30 bg-warning/5 p-5 space-y-4">
+          <div className="rounded-xl border border-warning/30 bg-warning/5 p-5 space-y-4 md:self-start">
             <div className="flex items-center gap-2">
               <DollarSign className="w-5 h-5 text-warning" />
               <h2 className="font-bold text-foreground text-lg">Pricing Structure</h2>
@@ -283,7 +281,7 @@ const HomePage = () => {
           </div>
 
           {/* Terms & Conditions */}
-          <div className="rounded-xl border border-border bg-card p-5 space-y-3">
+          <div className="rounded-xl border border-border bg-card p-5 space-y-3 md:col-span-2">
             <div className="flex items-center gap-2">
               <Info className="w-5 h-5 text-muted-foreground" />
               <h2 className="font-bold text-foreground">Terms & Conditions</h2>
@@ -293,10 +291,10 @@ const HomePage = () => {
             </p>
           </div>
 
-          <Button asChild className="w-full h-12 text-base font-semibold text-center">
+          <Button asChild className="w-full h-12 text-base font-semibold text-center md:col-span-2 md:mx-auto md:w-auto md:px-12">
             <Link href="/venue-registration">Register My Venue</Link>
           </Button>
-        </div>
+        </Container>
       )}
     </div>
   );

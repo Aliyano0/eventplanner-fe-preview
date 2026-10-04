@@ -2,8 +2,7 @@
 
 import { useState, useRef } from "react";
 import { Edit2, TrendingDown, BarChart3, Plus, Check, X, Trash2 } from "lucide-react";
-import BottomNav from "@/components/BottomNav";
-import TopBar from "@/components/TopBar";
+import { Container } from "@/components/layout/Container";
 import { budgetCategories as initialCategories } from "@/lib/data";
 import { setStoredValue, useStoredValue } from "@/hooks/use-local-storage";
 import { formatNumber } from "@/lib/format";
@@ -136,13 +135,11 @@ const BudgetPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <TopBar title="Budget" />
-
-      <div className="px-4 pt-4 max-w-4xl mx-auto">
+    <div className="bg-background">
+      <Container className="pt-4 pb-10">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-bold text-foreground">Budget</h2>
+            <h1 className="text-2xl font-bold text-foreground md:text-3xl">Budget</h1>
             <p className="text-sm text-muted-foreground">Track your spending</p>
           </div>
           <div className="flex items-center gap-2">
@@ -150,8 +147,10 @@ const BudgetPage = () => {
           </div>
         </div>
 
+        {/* Summary: total budget card + quick stats (side by side from lg) */}
+        <div className="lg:mb-4 lg:grid lg:grid-cols-3 lg:gap-4">
         {/* Budget header card */}
-        <div className="bg-primary rounded-2xl p-5 mb-4 text-primary-foreground">
+        <div className="bg-primary rounded-2xl p-5 mb-4 text-primary-foreground lg:col-span-2 lg:mb-0">
           <div className="flex items-center justify-between mb-1">
             <p className="text-sm opacity-80">Total Budget</p>
             <button onClick={startEditBudget} className="opacity-60 hover:opacity-100 transition-opacity">
@@ -167,7 +166,7 @@ const BudgetPage = () => {
                 value={budgetInput}
                 onChange={(e) => setBudgetInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && saveBudget()}
-                className="flex-1 bg-primary-foreground/20 text-primary-foreground text-2xl font-bold rounded-lg px-3 py-1 outline-hidden placeholder:text-primary-foreground/40"
+                className="min-w-0 flex-1 bg-primary-foreground/20 text-primary-foreground text-2xl font-bold rounded-lg px-3 py-1 outline-hidden placeholder:text-primary-foreground/40"
                 placeholder="100,000"
               />
               <button onClick={saveBudget} className="p-1.5 bg-primary-foreground/20 rounded-full hover:bg-primary-foreground/30">
@@ -200,7 +199,7 @@ const BudgetPage = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 mb-4">
+        <div className="grid grid-cols-2 gap-3 mb-4 lg:mb-0 lg:grid-cols-1">
           <div className="bg-card rounded-xl border border-border p-4">
             <TrendingDown className="w-5 h-5 text-muted-foreground mb-1" />
             <p className="text-xs text-muted-foreground">Under Budget</p>
@@ -212,9 +211,10 @@ const BudgetPage = () => {
             <p className="font-semibold text-foreground">{categories.length}</p>
           </div>
         </div>
+        </div>
 
-        <h3 className="font-bold text-foreground mb-3">Budget Breakdown</h3>
-        <div className="space-y-3">
+        <h2 className="font-bold text-foreground mb-3">Budget Breakdown</h2>
+        <div className="grid gap-3 md:grid-cols-2 md:gap-4 lg:grid-cols-3">
           {categories.map((cat, idx) => {
             const spent = getCatSpent(cat.name);
             const pctOfTotal = totalBudget > 0 ? (spent / totalBudget) * 100 : 0;
@@ -253,7 +253,7 @@ const BudgetPage = () => {
             );
           })}
         </div>
-      </div>
+      </Container>
 
       {/* Category Expense Detail Modal */}
       <Dialog
@@ -382,8 +382,6 @@ const BudgetPage = () => {
           )}
         </DialogContent>
       </Dialog>
-
-      <BottomNav />
     </div>
   );
 };

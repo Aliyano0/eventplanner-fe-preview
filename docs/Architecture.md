@@ -31,14 +31,20 @@ Frontend/
 ├─ next.config.ts, postcss.config.mjs, eslint.config.mjs, tsconfig.json, vitest.config.mts
 └─ src/
    ├─ app/                     routing layer ONLY: layouts, metadata, thin page.tsx files
-   │  ├─ layout.tsx            root layout (server) + metadata title template
+   │  ├─ layout.tsx            root layout (server): html/body, providers, SiteHeader, metadata template
    │  ├─ providers.tsx         client providers: Tooltip, Toaster, Sonner
    │  ├─ globals.css           Tailwind v4 entry, design tokens, v3-compat layer
-   │  ├─ not-found.tsx         404 (client, logs the missing path like the old app)
+   │  ├─ not-found.tsx         404 (header from root layout + footer)
    │  ├─ favicon.ico
-   │  └─ <route>/page.tsx      one per URL, see [[Routing-Map]]
+   │  ├─ (site)/               public pages group: layout = <main> + SiteFooter
+   │  └─ (planner)/            "My Planner" group: layout = PlannerNav + <main> + SiteFooter + BottomNav
+   │     └─ <route>/page.tsx   one per URL, see [[Routing-Map]]
    ├─ views/                   the screens (formerly src/pages in the Lovable project)
-   ├─ components/              TopBar, BottomNav + ui/ (shadcn kit)
+   ├─ components/
+   │  ├─ layout/               app shell: SiteHeader, SiteFooter, PlannerNav, BottomNav, AuthButtons, Container, BackLink, nav-config
+   │  ├─ legal/                LegalDocumentView (shared policy-page layout), RichText
+   │  └─ ui/                   shadcn kit
+   ├─ content/                 long-form copy as data: about.ts, legal/{terms,cookie-policy}.ts — see [[Legal-Pages]]
    ├─ hooks/                   use-local-storage, use-mobile, use-toast
    ├─ lib/                     data (sample data), format, utils (cn)
    ├─ assets/                  hero-event.jpg (imported through next/image)
@@ -52,6 +58,21 @@ The Lovable project kept its screens in `src/pages`, so leaving them there would
 accidental routes like `/BudgetPage`. They live in `src/views` instead; `src/app/**/page.tsx` files
 import them. This also keeps `app/` free of UI code, so route files stay small and can export
 `metadata`.
+
+## App shell
+
+Every page sits in the same shell — header on top, footer at the bottom — assembled by layouts rather than by
+each page. Details, breakpoints and per-page layouts: [[Layout-and-Responsive-Design]].
+
+```
+RootLayout            <body class="flex min-h-screen flex-col">
+ ├─ SiteHeader         sticky, all pages
+ └─ (site) layout   or   (planner) layout
+      ├─ [PlannerNav]    md+ only, planner pages
+      ├─ <main flex-1>   the page (a view inside Container)
+      ├─ SiteFooter
+      └─ [BottomNav]     phones only, planner pages
+```
 
 ## Request lifecycle
 

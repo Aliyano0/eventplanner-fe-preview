@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { Heart, Upload, Search, ExternalLink, X } from "lucide-react";
-import BottomNav from "@/components/BottomNav";
-import TopBar from "@/components/TopBar";
+import { Container } from "@/components/layout/Container";
 
 const categories = ["All", "Venue", "Decoration", "Attire", "Cake", "Flowers", "Other"];
 
@@ -17,13 +16,11 @@ const MoodboardPage = () => {
   const [activeFilter, setActiveFilter] = useState("All");
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <TopBar title="Moodboard" />
-
-      <div className="px-4 pt-4 max-w-4xl mx-auto">
+    <div className="bg-background">
+      <Container className="pt-4 pb-10">
         <div className="flex items-start justify-between mb-2">
           <div>
-            <h2 className="text-2xl font-bold text-foreground">Moodboard</h2>
+            <h1 className="text-2xl font-bold text-foreground md:text-3xl">Moodboard</h1>
             <p className="text-sm text-muted-foreground">{sampleImages.length} inspiration images</p>
           </div>
           <div className="flex gap-2">
@@ -62,7 +59,7 @@ const MoodboardPage = () => {
           ))}
         </div>
 
-        <div className="columns-2 gap-3 space-y-3">
+        <div className="columns-2 gap-3 space-y-3 md:columns-3 md:gap-4 md:space-y-4 lg:columns-4">
           {sampleImages.map((img, i) => (
             <div key={i} className="relative rounded-xl overflow-hidden break-inside-avoid">
               {/* Masonry layout relies on each image's natural height, which next/image cannot infer for remote URLs. */}
@@ -84,9 +81,7 @@ const MoodboardPage = () => {
             </div>
           ))}
         </div>
-      </div>
-
-      <BottomNav />
+      </Container>
     </div>
   );
 };

@@ -1,6 +1,5 @@
-import TopBar from "@/components/TopBar";
-import BottomNav from "@/components/BottomNav";
 import { Sparkles } from "lucide-react";
+import { Container } from "@/components/layout/Container";
 
 const services = [
   { id: "makeup", name: "Makeup Artist", emoji: "💄" },
@@ -10,13 +9,11 @@ const services = [
 
 const BookForMePage = () => {
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <TopBar title="Book for Me" />
-
-      <div className="px-4 py-4 max-w-4xl mx-auto space-y-5">
+    <div className="bg-background">
+      <Container className="space-y-5 pt-4 pb-10">
         {/* Header */}
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Book for Me</h2>
+          <h1 className="text-2xl font-bold text-foreground md:text-3xl">Book for Me</h1>
           <p className="text-sm text-muted-foreground">
             Book appointments for your event date
           </p>
@@ -27,7 +24,7 @@ const BookForMePage = () => {
           <Sparkles className="w-5 h-5 text-amber-500 mt-0.5 shrink-0" />
           <div>
             <p className="font-semibold text-foreground text-sm">How it works</p>
-            <p className="text-xs text-muted-foreground mt-0.5">
+            <p className="text-xs text-muted-foreground mt-0.5 md:max-w-3xl md:text-sm">
               Request appointments with makeup artists, photographers, or bridal designers for your event date. We&apos;ll confirm the closest available time within 24 hours via your contact details.
             </p>
           </div>
@@ -35,24 +32,22 @@ const BookForMePage = () => {
 
         {/* Select a Service */}
         <div className="space-y-3">
-          <h3 className="font-semibold text-foreground">Select a Service</h3>
-          <div className="grid grid-cols-3 gap-3">
+          <h2 className="font-semibold text-foreground">Select a Service</h2>
+          <div className="grid grid-cols-3 gap-3 md:gap-4 lg:max-w-3xl">
             {services.map((service) => (
               <button
                 key={service.id}
-                className="bg-card border border-border rounded-xl p-4 text-left hover:border-primary transition-colors"
+                className="bg-card border border-border rounded-xl p-4 text-left hover:border-primary transition-colors md:p-6"
               >
-                <span className="text-2xl">{service.emoji}</span>
-                <p className="text-sm font-medium text-foreground mt-2">
+                <span className="text-2xl md:text-4xl">{service.emoji}</span>
+                <p className="text-sm font-medium text-foreground mt-2 md:text-base">
                   {service.name}
                 </p>
               </button>
             ))}
           </div>
         </div>
-      </div>
-
-      <BottomNav />
+      </Container>
     </div>
   );
 };
